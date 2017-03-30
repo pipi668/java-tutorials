@@ -74,6 +74,7 @@ public class InstallCert {
         try {
             System.out.println("Starting SSL handshake...");
             socket.startHandshake();
+            System.out.println("After SSL handshake...");
             socket.close();
             System.out.println();
             System.out.println("No errors, certificate is already trusted");
@@ -95,17 +96,19 @@ public class InstallCert {
         System.out.println();
         MessageDigest sha1 = MessageDigest.getInstance("SHA1");
         MessageDigest md5 = MessageDigest.getInstance("MD5");
-        MessageDigest sha256 = MessageDigest.getInstance("SHA256");
+        MessageDigest sha256 = MessageDigest.getInstance("SHA-256");
         for (int i = 0; i < chain.length; i++) {
             X509Certificate cert = chain[i];
             System.out.println(" " + (i + 1) + " Subject " + cert.getSubjectDN());
-            System.out.println("   Issuer  " + cert.getIssuerDN());
+            System.out.println("Issuer\t" + cert.getIssuerDN());
             sha1.update(cert.getEncoded());
-            System.out.println("   sha1    " + toHexString(sha1.digest()));
+            System.out.println("sha1\t" + toHexString(sha1.digest()));
             md5.update(cert.getEncoded());
-            System.out.println("   md5     " + toHexString(md5.digest()));
+            System.out.println("md5\t" + toHexString(md5.digest()));
             sha256.update(cert.getEncoded());
-            System.out.println("   sha256     " + toHexString(sha256.digest()));
+            System.out.println("sha256\t" + toHexString(sha256.digest()));
+            System.out.println("sig alg\t" + cert.getSigAlgName() + "," + cert.getSigAlgOID());
+            System.out.println("signature\t" + toHexString(cert.getSignature()));
             System.out.println();
         }
 
@@ -157,6 +160,10 @@ public class InstallCert {
         }
 
         public X509Certificate[] getAcceptedIssuers() {
+            System.out.println("Begin getAcceptedIssuers...");
+            if (chain != null) {
+                return chain;
+            }
             throw new UnsupportedOperationException();
         }
 
@@ -165,6 +172,7 @@ public class InstallCert {
         }
 
         public void checkServerTrusted(X509Certificate[] chain, String authType) throws CertificateException {
+            System.out.println("Begin checkServerTrusted...");
             this.chain = chain;
             tm.checkServerTrusted(chain, authType);
         }

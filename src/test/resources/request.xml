@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="GBK"?>
+<conditions>
+	<!-- 每一个查询一个condition节点。本文档所有内容均区分大小写，请注意。 -->
+	<condition queryType="25173">
+		<!-- 查询个人银行账户核查信息，姓名、银行账户都不能为空，为存折时开户行行号必填 -->
+		<item>
+			<name>name</name>
+			<value>被查询人姓名,必填</value>
+		</item>
+    <item>
+        <name>accountNo</name>          
+         <value>银行账户号,必填</value>
+    </item>
+    <!--具体的银行列表单独给出-->
+    <item>
+        <name>openBankNo</name>
+        <value>银行账户号所在开户行行号，为存折时不可以为空;为借记卡、信用卡时可以为空，如果有输入，以系统根据银行账户号自动匹配的为准</value>
+    </item>	
+    <!--
+        收费子报告ID：
+        14508 支持17家银行的借记卡、信用卡核查，支持12家银行的存折核查
+        14507 支持14家银行的借记卡、12家银行的存折核查   
+    -->			
+		<item>
+			<name>subreportIDs</name>
+			<value>收费子报告ID</value>
+		</item>
+		<item>
+			<name>refID</name>			
+			<value>引用ID，查询者提交的用于识别本次查询的流水号，系统返回结果中会原样包含该流水号。可以为空。</value>
+		</item>
+	</condition>
+</conditions>

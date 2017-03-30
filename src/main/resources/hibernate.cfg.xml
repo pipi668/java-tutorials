@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC
+"-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+    <session-factory name="sessionFactory">
+        <property name="hibernate.bytecode.use_reflection_optimizer">false</property>
+        <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
+        <property name="hibernate.connection.password">41gcsp_dev</property>
+        <property name="hibernate.connection.url">jdbc:mysql://10.143.108.41:3306/gcsp_dev</property>
+        <property name="hibernate.connection.username">gcsp_dev</property>
+        <property name="hibernate.dialect">org.hibernate.dialect.MySQL5InnoDBDialect</property>
+        <property name="hibernate.search.autoregister_listeners">false</property>
+        <property name="hibernate.validator.apply_to_ddl">false</property>
+        <property name="hibernate.validator.autoregister_listeners">false</property>
+        <mapping resource="com/rock/framework/model/gcsp/TBusiApprBrResult.hbm.xml" />
+        <mapping resource="com/rock/framework/model/gcsp/TRateModelDefinition.hbm.xml" />
+        <mapping resource="com/rock/framework/model/gcsp/TGomeMember.hbm.xml" />
+        <mapping resource="com/rock/framework/model/gcsp/TBlackList.hbm.xml" />
+        <mapping resource="com/rock/framework/model/gcsp/TCreditReport.hbm.xml" />
+        <mapping resource="com/rock/framework/model/gcsp/TRiskProcedure.hbm.xml" />
+        <mapping resource="com/rock/framework/model/gcsp/SysCodeGroup.hbm.xml" />
+        <mapping resource="com/rock/framework/model/gcsp/TBusiApprBrDetail.hbm.xml" />
+        <mapping resource="com/rock/framework/model/gcsp/SysGeneralCode.hbm.xml" />
+        <mapping resource="com/rock/framework/model/gcsp/TCustInfo.hbm.xml" />
+        <mapping resource="com/rock/framework/model/gcsp/TCardCls.hbm.xml" />
+        <mapping resource="com/rock/framework/model/gcsp/TParaBrRule.hbm.xml" />
+    </session-factory>
+</hibernate-configuration>

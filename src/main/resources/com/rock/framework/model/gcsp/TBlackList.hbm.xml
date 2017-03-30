@@ -1,0 +1,81 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated May 4, 2016 11:20:19 AM by Hibernate Tools 3.6.0.Final -->
+<hibernate-mapping>
+    <class name="com.rock.framework.model.gcsp.TBlackList" table="t_blackList" catalog="gcsp_dev">
+        <id name="blId" type="string">
+            <column name="bl_id" length="32" />
+            <generator class="assigned" />
+        </id>
+        <property name="custId" type="string">
+            <column name="cust_id" length="32" />
+        </property>
+        <property name="custName" type="string">
+            <column name="cust_name" length="64" />
+        </property>
+        <property name="idType" type="string">
+            <column name="id_type" length="1" />
+        </property>
+        <property name="idNo" type="string">
+            <column name="id_no" length="30" />
+        </property>
+        <property name="mobile" type="string">
+            <column name="mobile" length="12" />
+        </property>
+        <property name="bankCode" type="string">
+            <column name="bank_code" length="30" />
+        </property>
+        <property name="bankName" type="string">
+            <column name="bank_name" length="64" />
+        </property>
+        <property name="bankCard" type="string">
+            <column name="bank_card" length="30" />
+        </property>
+        <property name="blackOrigin" type="string">
+            <column name="black_origin" length="10" />
+        </property>
+        <property name="blackLevel" type="string">
+            <column name="black_level" length="1" />
+        </property>
+        <property name="beginDate" type="date">
+            <column name="begin_date" length="10" />
+        </property>
+        <property name="endDate" type="date">
+            <column name="end_date" length="10" />
+        </property>
+        <property name="blackFlag" type="string">
+            <column name="black_flag" length="1" />
+        </property>
+        <property name="shiftInDate" type="date">
+            <column name="shiftIn_date" length="10" />
+        </property>
+        <property name="shiftInReason" type="string">
+            <column name="shiftIn_reason" />
+        </property>
+        <property name="shiftOutDate" type="date">
+            <column name="shiftOut_date" length="10" />
+        </property>
+        <property name="firstShiftInDate" type="date">
+            <column name="first_shiftIn_date" length="10" />
+        </property>
+        <property name="firstShiftInTime" type="timestamp">
+            <column name="first_shiftIn_time" length="19" />
+        </property>
+        <property name="operOrg" type="string">
+            <column name="oper_org" length="32" />
+        </property>
+        <property name="operId" type="string">
+            <column name="oper_id" length="32" />
+        </property>
+        <property name="lastOperDate" type="timestamp">
+            <column name="last_oper_date" length="19" />
+        </property>
+        <property name="lastOperOrg" type="string">
+            <column name="last_oper_org" length="32" />
+        </property>
+        <property name="lastOperId" type="string">
+            <column name="last_oper_id" length="32" />
+        </property>
+    </class>
+</hibernate-mapping>

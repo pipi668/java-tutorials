@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="GBK"?>
+<!-- 1..1 -->
+<cisReports batNo="查询批次号" unitName="查询单位名称" subOrgan="分支机构名称" queryUserID="查询操作员登录名" queryCount="查询请求数量" receiveTime="查询申请时间,格式YYYYMMDD HH24:mm:ss">
+	<!-- 以下为每个查询申请的查询结果 1..n -->
+	<cisReport reportID="报告编号" buildEndTime="报告生成结束时间,格式YYYYMMDD HH24:mm:ss" queryReasonID="查询原因ID，详见数据字典" subReportTypes="收费子报告ID" treatResult="对应的收费子报告收费次数,与subReportTypes一一对应,为大于等于0的值的集合,用逗号分隔" refID="引用ID,为查询申请条件中的引用ID" hasSystemError="有否系统错误，true：有错误，false：无错误" isFrozen="该客户是否被冻结，true：被冻结，false：未被冻结">
+		<!-- 查询条件信息 1..1 -->
+	<queryConditions>
+		<item>
+			<name>name</name>
+			<caption>被查询者姓名</caption>
+			<value>被查询者姓名的值</value>
+		</item>			
+		<item>
+			<name>accountNo</name>
+			<caption>银行账号</caption>
+			<value>银行账号的值</value>
+		</item>	
+				<!-- 
+		    为信用卡、借记卡时，如果查询时有输入开户行号，这里显示的开户行行号的值为系统跟据银行账户自动匹配到的而非查询时输入的值 
+		-->
+		<item>
+			<name>openBankNo</name>
+			<caption>开户行行号</caption>
+			<value>开户行行号的值</value>
+		</item>				
+	</queryConditions>
+<!-- 个人银行账户核查 只有treatResult为1时显示item节点 -->
+  <personBankCheckInfo  subReportType="子报告ID" subReportTypeCost="收费子报告ID" treatResult="子报告查询状态,1：查得，2：未查得，3：其他原因未查得" treatErrorCode="treatResult=3时的错误代码,详见数据字典,treatResult!=3时,该属性不存在" errorMessage="treatResult=3时的错误描述信息,treatResult!=3时,该属性的值为空">
+                      <item>
+                              <condition>
+                                      <name>被核查者姓名</name>                                    
+                                      <accountNo>被核查银行账户</accountNo>
+                                      <accountBankNo>被核查银行账户所在卡户行行号</accountBankNo>
+                                      <accountBankName>被核查银行账户所在卡户行名称</accountBankName>
+                                      <cardNature>账户性质，只有核对结果为一致时才有这个节点，具体的值有：信用卡、预付卡、借记卡、信用卡(借贷合一卡)、借记卡(借贷合一卡)</cardNature>
+                              </condition>
+                              <status>核对结果，为1是表示一致，为2时表示不一致，为3时表示未知，treatResult不为1时为空</status>
+                              <message>显示状态为3时，具体的原因描述,只有status为3时才有值,如以下描述：
+				                              	账户已注销,
+																				账户不存在
+																				账户被冻结
+																				账户状态异常
+																				未知（银行账户可能存在异常或其他原因）等等
+                              </message>
+                      </item>
+ </personBankCheckInfo>
+
+
+	</cisReport>
+</cisReports>

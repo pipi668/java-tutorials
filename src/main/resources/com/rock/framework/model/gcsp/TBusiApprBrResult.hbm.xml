@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated May 4, 2016 11:20:19 AM by Hibernate Tools 3.6.0.Final -->
+<hibernate-mapping>
+    <class name="com.rock.framework.model.gcsp.TBusiApprBrResult" table="t_busi_appr_br_result" catalog="gcsp_dev">
+        <id name="keyno" type="string">
+            <column name="keyno" length="24" />
+            <generator class="assigned" />
+        </id>
+        <property name="tokenid" type="string">
+            <column name="tokenid" length="100" />
+        </property>
+        <property name="swiftNumber" type="string">
+            <column name="swift_number" length="40" />
+        </property>
+        <property name="code" type="string">
+            <column name="code" length="10" />
+        </property>
+        <property name="mobile" type="string">
+            <column name="mobile" length="12" />
+        </property>
+        <property name="paperid" type="string">
+            <column name="paperid" length="30" />
+        </property>
+        <property name="custName" type="string">
+            <column name="cust_name" length="70" />
+        </property>
+        <property name="flagSpecialListC" type="string">
+            <column name="flag_specialList_c" length="2" />
+        </property>
+        <property name="flagAccountChangeMonth" type="string">
+            <column name="flag_accountChangeMonth" length="2" />
+        </property>
+        <property name="flagRulespeciallist" type="string">
+            <column name="flag_rulespeciallist" length="2" />
+        </property>
+        <property name="flag" type="string">
+            <column name="flag" length="1" />
+        </property>
+        <property name="msg" type="string">
+            <column name="msg" length="100" />
+        </property>
+        <property name="ruleFinalDecision" type="string">
+            <column name="rule_final_decision" length="10" />
+        </property>
+        <property name="ruleFinalWeight" type="big_decimal">
+            <column name="rule_final_weight" precision="12" scale="3" />
+        </property>
+    </class>
+</hibernate-mapping>

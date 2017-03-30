@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<launchConfiguration type="org.hibernate.eclipse.launch.ConsoleConfigurationLaunchConfigurationType">
+<listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
+<listEntry value="java-tutorials"/>
+</listAttribute>
+<listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_TYPES">
+<listEntry value="4"/>
+</listAttribute>
+<listAttribute key="org.eclipse.debug.ui.favoriteGroups">
+<listEntry value="org.eclipse.debug.ui.launchGroup.run"/>
+</listAttribute>
+<booleanAttribute key="org.eclipse.jdt.launching.DEFAULT_CLASSPATH" value="true"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="java-tutorials"/>
+<stringAttribute key="org.hibernate.eclipse.launch.CFG_XML_FILE" value="\java-tutorials\src\main\resources\hibernate.cfg.xml"/>
+<stringAttribute key="org.hibernate.eclipse.launch.CONFIGURATION_FACTORY" value="CORE"/>
+<stringAttribute key="org.hibernate.eclipse.launch.CONNECTION_PROFILE_NAME" value="MySQL-5.6-gcsp"/>
+<listAttribute key="org.hibernate.eclipse.launch.FILE_MAPPINGS"/>
+<stringAttribute key="org.hibernate.eclipse.launch.HIBERNATE_VERSION" value="3.6"/>
+<stringAttribute key="org.hibernate.eclipse.launchDIALECT" value="org.hibernate.dialect.MySQL5InnoDBDialect"/>
+</launchConfiguration>

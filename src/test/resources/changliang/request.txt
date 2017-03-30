@@ -1,0 +1,242 @@
+{
+    "SERVICE": {
+        "SERVICE_HEADER": {
+            "OP_ID": "opId",
+            "SUB_TERMINAL_TYPE": "APP",
+            "CHANNEL_ID": "BANK",
+            "ACQ_ID": "20000005",
+            "VERSION_ID": "01",
+            "SERVICESN": "YG20171202113122127332",
+            "REQUEST_TIME": "20171202113122",
+            "MAC": "mac",
+            "SERVICE_ID": "apply",
+            "ORG": "000000000001"
+        },
+        "SERVICE_BODY": {
+            "REQUEST": {
+            	"COOPERATOR_ID": "20000005",
+            	"PRODUCT_CD": "3101",
+                "APP_SERIAL_NO": "1111111111111117332", 
+                "APP_LMT": 5000,
+                "LONG_TERM": "3",
+                "NAME": "刘五",             
+                "UNIQUE_ID": "eb92568e718e4288bd02564d6cd57332",
+                "ID_NO": "513523199008207332",
+                "APP_NO": "20151219200331007332",
+                "UNIT_NAME": "马上消费金融",
+                "EMP_ZONE": "110000",
+                "MEMO": "边界值测试",
+                "MARITAL_STATUS": "C",
+                "WORK_STAND_FROM": "2011-01",
+                "EMP_PHONE": "021-21217332",
+                "EMP_POST": "A",
+                "BANK_PROVINCE_CODE": "110000",
+                "ID_LAST_DATE": "2099-12-31",
+                "HOME_PHONE": "01063537332",
+                "HOUSE_CONDITION": "A",
+                "YEARS_OF_WORK": 4,
+                "JION_LIFE_INSURANCE": "Y",
+                "EMP_PROVINCE": "110000",
+                "LENGTH_OF_SCHOOLING": "14", 
+                "LIFE_INSURANCE_AMT": 20000,
+                "SOCIAL_IDENTITY": "SI02",
+                "EMP_ADD": "浦东新区高科",
+                "MONTH_INCOME": 3000,
+                "ORDER_PRODUCT_INFO": [
+                    {
+                        "COMMODITY_ID": "bianhao9999999",
+                        "CATEGORY_LEVEL_1_ID": "15",
+                        "CATEGORY_LEVEL_1_NAME": "日用品-一级品类",
+                        "CATEGORY_LEVEL_2_ID": "1501",
+                        "CATEGORY_LEVEL_2_NAME": "日用品-二级品类",
+                        "CATEGORY_LEVEL_3_ID": "150101",
+                        "CATEGORY_LEVEL_3_NAME": "日用品-三级品类",
+                        "BRAND": "品牌名称1",
+                        "COMMODITY_NAME": "商品名称1",
+                        "PRICE": 200,
+                        "QUANTITY": 10
+                    },
+                    {
+                        "COMMODITY_ID": "bianhao9999999",
+                        "CATEGORY_LEVEL_1_ID": "15",
+                        "CATEGORY_LEVEL_1_NAME": "日用品-一级品类",
+                        "CATEGORY_LEVEL_2_ID": "1501",
+                        "CATEGORY_LEVEL_2_NAME": "日用品-二级品类",
+                        "CATEGORY_LEVEL_3_ID": "150101",
+                        "CATEGORY_LEVEL_3_NAME": "日用品-三级品类",
+                        "BRAND": "品牌名称1",
+                        "COMMODITY_NAME": "商品名称1",
+                        "PRICE": 200,
+                        "QUANTITY": 10
+                    }
+                ], 
+                "BANK_PROVINCE_NAME": "北京市",
+                "ID_TYPE": "I",
+                "ABODE_DETAIL": "黑龙江省双鸭山市宝清县#1111",
+                "EMP_DEPARTMENT": "业务三部",
+                "YEAR_INCOME": null,
+                "OTHER_LOAN": 123,
+                "EMP_STAND_FROM": "2014-10",
+                "CONTACT_INFO": [
+                    {
+                        "CONTACT_NAME": "张三",
+                        "CONTACT_RELATION": "C",
+                        "CONTACT_MOBILE": "13244557332",
+                        "CONTACT_ADDRESS": "ContactAddress"
+                    }
+                ],
+                "SOCIAL_ACCOUNT_INFO": [
+                    {
+                        "SOCIAL_ACCOUNT_TYPE": "T",
+                        "SOCIAL_ACCOUNT_NO": "taobao"
+                    },
+                    {
+                        "SOCIAL_ACCOUNT_TYPE": "Q",
+                        "SOCIAL_ACCOUNT_NO": "237437332"
+                    },
+                    {
+                        "SOCIAL_ACCOUNT_TYPE": "J",
+                        "SOCIAL_ACCOUNT_NO": "jdaccount"
+                    }
+                ],
+                "LOAN_FIXED_AMT": 7000,
+                "EMAIL": "hdhd@126.com",
+                "BANK_CITY_CODE": "110100",
+                "LOAN_PURPOSE": "PL01",
+                "APP_NO": "20151204190000007332",
+                "EMP_STRUCTURE": "A",
+                "ORDER_INFO": {
+                    "ORDER_ID": "20151212445566777332",
+                    "REFERENCE_ID": "20151212445566777332",
+                    "COMPANY_ID": "200000050000008",
+                    "TERMINAL_ID": "99999999999999",
+                    "RA_ID": "222",
+                    "CUSTOMER_ID": "123456789",
+                    "PROMOTION_ID": "38500",
+                    "TOTAL_AMOUNT": 3000,
+                    "TOTAL_QUANTITY": 2,
+                    "CONSIGNEE": "收件人",
+                    "CONSIGNEE_PHONE": "185166667332",
+                    "CONSIGNEE_ADDRESS": "重庆市渝兴广场",
+                    "INTERNAL_CODE": "00",
+                    "COLLECTION_DOWNPAYMENT": "0",
+                    "DOWN_PAYMENT": 300,
+                    "SUBSIDY_RATIO": 0.15,
+                    "PAYMENT_TYPE": "1",
+                    "ORDER_CREATE_TIME": "2015-12-18 19:58:30",
+                    "TRANSACTION_TIME": "2015-12-18 19:58:30"
+                },
+                "ORDER_PRODUCT_INFO": [
+                    {
+                        "COMMODITY_ID": "bianhao9999999",
+                        "CATEGORY_LEVEL_1_ID": "15",
+                        "CATEGORY_LEVEL_1_NAME": "日用品-一级品类",
+                        "CATEGORY_LEVEL_2_ID": "1501",
+                        "CATEGORY_LEVEL_2_NAME": "日用品-二级品类",
+                        "CATEGORY_LEVEL_3_ID": "150101",
+                        "CATEGORY_LEVEL_3_NAME": "日用品-三级品类",
+                        "BRAND": "品牌名称1",
+                        "COMMODITY_NAME": "商品名称1",
+                        "PRICE": 200,
+                        "QUANTITY": 10
+                    },
+                    {
+                        "COMMODITY_ID": "bianhao9999999",
+                        "CATEGORY_LEVEL_1_ID": "15",
+                        "CATEGORY_LEVEL_1_NAME": "日用品-一级品类",
+                        "CATEGORY_LEVEL_2_ID": "1501",
+                        "CATEGORY_LEVEL_2_NAME": "日用品-二级品类",
+                        "CATEGORY_LEVEL_3_ID": "150101",
+                        "CATEGORY_LEVEL_3_NAME": "日用品-三级品类",
+                        "BRAND": "品牌名称1",
+                        "COMMODITY_NAME": "商品名称1",
+                        "PRICE": 200,
+                        "QUANTITY": 10
+                    }
+                ], 
+                "EMP_CITY": "110100",
+                "ACCESSORY_INFO": [
+                    {
+                        "ACCESSORY_TYPE": "W",
+                        "ACCESSORY_COUNT": 1,
+                        "REQUIRED_FLAG": "Y"
+                    },
+                    {
+                        "ACCESSORY_TYPE": "F",
+                        "ACCESSORY_COUNT": 1,
+                        "REQUIRED_FLAG": "Y"
+                    },
+                    {
+                        "ACCESSORY_TYPE": "A",
+                        "ACCESSORY_COUNT": 1,
+                        "REQUIRED_FLAG": "N"
+                    },
+                    {
+                        "ACCESSORY_TYPE": "P",
+                        "ACCESSORY_COUNT": 1,
+                        "REQUIRED_FLAG": "Y"
+                    },
+                    {
+                        "ACCESSORY_TYPE": "S",
+                        "ACCESSORY_COUNT": 1,
+                        "REQUIRED_FLAG": "N"
+                    },
+                    {
+                        "ACCESSORY_TYPE": "B",
+                        "ACCESSORY_COUNT": 1,
+                        "REQUIRED_FLAG": "N"
+                    },
+                    {
+                        "ACCESSORY_TYPE": "C",
+                        "ACCESSORY_COUNT": 1,
+                        "REQUIRED_FLAG": "N"
+                    },
+                    {
+                        "ACCESSORY_TYPE": "R",
+                        "ACCESSORY_COUNT": 1,
+                        "REQUIRED_FLAG": "Y"
+                    },
+                    {
+                        "ACCESSORY_TYPE": "L",
+                        "ACCESSORY_COUNT": 1,
+                        "REQUIRED_FLAG": "N"
+                    },
+                    {
+                        "ACCESSORY_TYPE": "N",
+                        "ACCESSORY_COUNT": 1,
+                        "REQUIRED_FLAG": "N"
+                    },
+                    {
+                        "ACCESSORY_TYPE": "H",
+                        "ACCESSORY_COUNT": 1,
+                        "REQUIRED_FLAG": "N"
+                    }
+                ],
+                "BANK_CARD_NO": "6227003762380067332",
+                "ABODE_STATE": "110000",
+                "ABODE_CITY": "110100",
+                "CELLPHONE": "18677997332",
+                "EMP_PHONE_EXT_NUM": "8529",
+                "RESIZE": 3,
+                "QUALIFICATION": "B",
+                "BANK_NAME": "建设银行", 
+                "ABODE_ZONE": "110101",
+                "BANK_CITY_NAME": "市辖区",
+                "GENDER": "M",
+                "OTHER_INCOME": 5000,
+                "BANK_CODE": "0105",
+                "EMP_TYPE": "A",
+                "FEE_RATE": 0.00263,
+                "FEE_AMOUNT": 125,
+                "INS_RATE": 0.002,
+                "INS_AMT": 112,
+                "INSTALLMENT_FEE_RATE": 0.0145,
+                "INSTALLMENT_FEE_AMT": 345,
+                "LIFE_INSU_FEE_RATE": 0.0056,
+                "LOAN_RATE": 0.18263,
+                "AGENT_FEE_RATE": 0.4112,
+                "AGENT_FEE_AMOUNT": 512
+            }
+        }
+    }
+}

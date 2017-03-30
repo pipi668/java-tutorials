@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated May 4, 2016 11:20:19 AM by Hibernate Tools 3.6.0.Final -->
+<hibernate-mapping>
+    <class name="com.rock.framework.model.gcsp.TCreditReport" table="t_credit_report" catalog="gcsp_dev">
+        <id name="applyId" type="string">
+            <column name="apply_id" length="32" />
+            <generator class="assigned" />
+        </id>
+        <property name="busiId" type="string">
+            <column name="busi_id" length="32" />
+        </property>
+        <property name="custId" type="string">
+            <column name="cust_id" length="32" />
+        </property>
+        <property name="blackList" type="string">
+            <column name="black_list" length="1" />
+        </property>
+        <property name="secNetwork" type="string">
+            <column name="sec_network" length="1" />
+        </property>
+        <property name="score" type="java.lang.Integer">
+            <column name="score" />
+        </property>
+        <property name="remark1" type="string">
+            <column name="remark1" length="32" />
+        </property>
+        <property name="remark2" type="string">
+            <column name="remark2" length="32" />
+        </property>
+        <property name="remark3" type="string">
+            <column name="remark3" length="32" />
+        </property>
+        <property name="remark4" type="string">
+            <column name="remark4" length="32" />
+        </property>
+    </class>
+</hibernate-mapping>

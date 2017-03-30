@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated May 4, 2016 11:20:19 AM by Hibernate Tools 3.6.0.Final -->
+<hibernate-mapping>
+    <class name="com.rock.framework.model.gcsp.TGomeMember" table="t_gome_member" catalog="gcsp_dev">
+        <id name="id" type="string">
+            <column name="ID" length="32" />
+            <generator class="assigned" />
+        </id>
+        <property name="gomeMobile" type="string">
+            <column name="GOME_MOBILE" length="12" not-null="true" />
+        </property>
+        <property name="gomeCustname" type="string">
+            <column name="GOME_CUSTNAME" length="70" />
+        </property>
+        <property name="gomeIdNo" type="string">
+            <column name="GOME_ID_NO" length="30" />
+        </property>
+        <property name="gomeScore" type="java.lang.Integer">
+            <column name="GOME_SCORE" />
+        </property>
+        <property name="memberType" type="string">
+            <column name="MEMBER_TYPE" length="10" />
+        </property>
+        <property name="isMember" type="string">
+            <column name="IS_MEMBER" length="1" />
+        </property>
+    </class>
+</hibernate-mapping>

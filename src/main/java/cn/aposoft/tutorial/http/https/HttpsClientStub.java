@@ -10,16 +10,13 @@ import java.lang.reflect.Method;
 import java.nio.charset.Charset;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
 import java.security.cert.X509Certificate;
 import java.util.Map;
 import java.util.Set;
 
 import javax.net.ssl.HostnameVerifier;
-import javax.net.ssl.KeyManager;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLContextSpi;
-import javax.net.ssl.TrustManager;
 
 import org.apache.http.HttpHost;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -59,7 +56,8 @@ public class HttpsClientStub {
      */
     public static void main(String[] args) throws NoSuchAlgorithmException, KeyManagementException, ClassNotFoundException, NoSuchFieldException,
             NoSuchMethodException, SecurityException {
-        String securityUrl = "https://myfen.gomemyf.com/fen-api/goods/?sku=100001911";
+        // String securityUrl =
+        // "https://myfen.gomemyf.com/fen-api/goods/?sku=100001911";
         String securityUrlGomeFinance = "https://www.gomefinance.com.cn/";
         // readContent1(securityUrl);
 
@@ -72,6 +70,7 @@ public class HttpsClientStub {
     public static void defaultKeyManagers() throws ClassNotFoundException, NoSuchFieldException {
         // sun.security.ssl.SunX509KeyManagerImpl impl;
         try {
+            @SuppressWarnings("restriction")
             Method method = sun.security.ssl.SSLContextImpl.DefaultSSLContext.class.getDeclaredMethod("getDefaultKeyManager");
 
             if (!method.isAccessible()) {
@@ -91,9 +90,12 @@ public class HttpsClientStub {
                             if (!field.isAccessible()) {
                                 field.setAccessible(true);
                                 Object credentialsMap = field.get(km);
-                                Map<String, Object> map = (Map<String, Object>) credentialsMap;
-                                System.out.println(credentialsMap.getClass().getName());
-                                System.out.println(map.keySet().toString());
+                                if (credentialsMap instanceof Map) {
+                                    @SuppressWarnings("unchecked")
+                                    Map<String, Object> map = (Map<String, Object>) credentialsMap;
+                                    System.out.println(credentialsMap.getClass().getName());
+                                    System.out.println(map.keySet().toString());
+                                }
 
                             }
                         }
@@ -111,6 +113,7 @@ public class HttpsClientStub {
 
     //
     public static void defaultTrustManagers() throws ClassNotFoundException, NoSuchFieldException, NoSuchMethodException, SecurityException {
+        @SuppressWarnings("restriction")
         Method method = sun.security.ssl.SSLContextImpl.DefaultSSLContext.class.getDeclaredMethod("getDefaultTrustManager");
 
         if (!method.isAccessible()) {
@@ -128,11 +131,14 @@ public class HttpsClientStub {
                         // 可访问性
                         if (!field.isAccessible()) {
                             field.setAccessible(true);
-                            Object credentialsMap = field.get(km);
-                            Set<X509Certificate> set = (Set<X509Certificate>) credentialsMap;
-                            System.out.println(credentialsMap.getClass().getName());
-                            System.out.println(set.toString());
-                            System.out.println(set.size());
+                            Object certificateSet = field.get(km);
+                            if (certificateSet instanceof Set) {
+                                @SuppressWarnings("unchecked")
+                                Set<X509Certificate> set = (Set<X509Certificate>) certificateSet;
+                                System.out.println(certificateSet.getClass().getName());
+                                System.out.println(set.toString());
+                                System.out.println(set.size());
+                            }
 
                         }
                     }
@@ -152,6 +158,7 @@ public class HttpsClientStub {
     }
 
     // 如果加载拦截, https直接报证书异常
+    @SuppressWarnings("unused")
     private static void readContent1(String securityUrl) throws NoSuchAlgorithmException {
         HttpHost proxy = new HttpHost("localhost", 8888);
         DefaultProxyRoutePlanner routePlanner = new DefaultProxyRoutePlanner(proxy);
@@ -199,7 +206,7 @@ public class HttpsClientStub {
 
         SSLConnectionSocketFactory sslFactory = new SSLConnectionSocketFactory(sslContext, hostNameVerifier);
 
-        Registry<ConnectionSocketFactory> registry = RegistryBuilder.<ConnectionSocketFactory>create()
+        Registry<ConnectionSocketFactory> registry = RegistryBuilder.<ConnectionSocketFactory> create()
                 .register("http", PlainConnectionSocketFactory.getSocketFactory()) //
                 .register("https", sslFactory) //
                 .build();
@@ -214,6 +221,7 @@ public class HttpsClientStub {
             try (CloseableHttpResponse resp = client.execute(request);) {
                 String respText = EntityUtils.toString(resp.getEntity(), Charset.forName("UTF-8"));
                 // System.out.println(respText);
+                respText.length();
             }
         } catch (IOException e) {
             e.printStackTrace();

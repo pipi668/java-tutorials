@@ -18,7 +18,9 @@ public class EndianTest {
     private static Unsafe getUnsafeInstance() throws SecurityException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
         Field theUnsafeInstance = Unsafe.class.getDeclaredField("theUnsafe");
         theUnsafeInstance.setAccessible(true);
+        // return Unsafe.getUnsafe();
         return (Unsafe) theUnsafeInstance.get(Unsafe.class);
+
     }
 
     private long demo;

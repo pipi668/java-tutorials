@@ -1,7 +1,7 @@
 /**
  * 
  */
-package cn.aposoft.tutorial.sort;
+package cn.aposoft.tutorial.algorithm.sort;
 
 /**
  * @author LiuJian

@@ -6,4 +6,4 @@
  *  @date 2017年3月13日
  * 
  */
-package cn.aposoft.tutorial.character;
+package cn.aposoft.tutorial.lang.character;

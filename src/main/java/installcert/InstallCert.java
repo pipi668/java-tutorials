@@ -175,7 +175,7 @@ public class InstallCert {
         }
 
         public X509Certificate[] getAcceptedIssuers() {
-            throw new UnsupportedOperationException();
+            return this.chain;
         }
 
         public void checkClientTrusted(X509Certificate[] chain, String authType) throws CertificateException {

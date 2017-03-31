@@ -1,7 +1,7 @@
 /**
  *   Copyright  :  www.aposoft.cn
  */
-package cn.aposoft.tutorial.character;
+package cn.aposoft.tutorial.lang.character;
 
 import java.nio.charset.Charset;
 

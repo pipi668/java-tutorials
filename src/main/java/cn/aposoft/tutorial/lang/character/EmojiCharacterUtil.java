@@ -1,7 +1,7 @@
 /**
  *   Copyright  :  www.aposoft.cn
  */
-package cn.aposoft.tutorial.character;
+package cn.aposoft.tutorial.lang.character;
 
 /**
  * 用于过滤表情字符的工具类

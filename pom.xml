@@ -16,6 +16,18 @@
 	</properties>
 
 	<dependencies>
+		<!-- import sharding-jdbc core -->
+		<dependency>
+			<groupId>com.dangdang</groupId>
+			<artifactId>sharding-jdbc-self-id-generator</artifactId>
+			<version>1.4.1</version>
+		</dependency>
+		<dependency>
+			<groupId>com.dangdang</groupId>
+			<artifactId>sharding-jdbc-core</artifactId>
+			<version>1.4.1</version>
+		</dependency>
+
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpclient</artifactId>

@@ -3,7 +3,7 @@
  */
 /**
  *  @author LiuJian
- *  @date 2017年3月21日
+ *  @date 2017年4月1日
  * 
  */
-package cn.aposoft.tutorial.sha1;
+package cn.aposoft.tutorial.algorithm.hash;

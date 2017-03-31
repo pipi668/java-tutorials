@@ -1,7 +1,7 @@
 /**
  *   Copyright  :  www.aposoft.cn
  */
-package cn.aposoft.tutorial.sha1;
+package cn.aposoft.tutorial.algorithm.hash.sha1;
 
 import java.nio.charset.Charset;
 

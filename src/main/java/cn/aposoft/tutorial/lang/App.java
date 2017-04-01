@@ -14,14 +14,13 @@ public class App {
      * @param args
      */
     public static void main(String[] args) {
-        Object o = new Object();
-        synchronized (o) {
-            try {
-                o.wait(60 * 1000 * 1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+
+        int i = 0;
+        long begin = System.currentTimeMillis(); // 一亿次/s以上 178852376,176083143,177243103
+        while (System.currentTimeMillis() - begin < 1000) {
+            i++;
         }
+        System.out.println(i + "," + i / 1000 / 1000);
     }
 
 }

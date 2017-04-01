@@ -174,6 +174,8 @@ public class InstallCert {
         public void checkServerTrusted(X509Certificate[] chain, String authType) throws CertificateException {
             System.out.println("Begin checkServerTrusted...");
             this.chain = chain;
+            System.out.println("tm:" + tm.getClass().getName());
+            System.out.println(authType);
             tm.checkServerTrusted(chain, authType);
         }
     }

@@ -9,8 +9,6 @@ public class ManagerStub {
         String algorithm = KeyManagerFactory.getDefaultAlgorithm();
         System.out.println(algorithm);
         KeyManagerFactory factory = KeyManagerFactory.getInstance(algorithm);
-        
-        
-        
+
     }
 }

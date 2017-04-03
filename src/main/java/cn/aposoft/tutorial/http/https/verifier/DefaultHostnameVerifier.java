@@ -96,20 +96,20 @@ public final class DefaultHostnameVerifier implements HostnameVerifier {
 
     @Override
     public boolean verify(final String host, final SSLSession session) {
-        log.info(host);
+        // log.info(host);
         try {
             final Certificate[] certs = session.getPeerCertificates();
-            log.info("Certificate Length:" + certs.length);
+            // log.info("Certificate Length:" + certs.length);
             final X509Certificate x509 = (X509Certificate) certs[0];
-            try {
-                for (Certificate cert : certs) {
-                    KeyStoreStub.visitCertificate(cert);
-                }
-
-            } catch (CertificateEncodingException | CertificateParsingException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
+            // try {
+            // for (Certificate cert : certs) {
+            // // KeyStoreStub.visitCertificate(cert);
+            // }
+            //
+            // } catch (CertificateEncodingException |
+            // CertificateParsingException e) {
+            // e.printStackTrace();
+            // }
             verify(host, x509);
             return true;
         } catch (final SSLException ex) {

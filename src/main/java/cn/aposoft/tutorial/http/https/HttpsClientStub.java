@@ -64,7 +64,7 @@ public class HttpsClientStub {
         // 1 读取公钥证书到本地
         // readContent(securityUrl);
         readContent(securityUrlGomeFinance);
-        defaultManagers();
+        // defaultManagers();
     }
 
     public static void defaultKeyManagers() throws ClassNotFoundException, NoSuchFieldException {
@@ -160,10 +160,13 @@ public class HttpsClientStub {
     // 如果加载拦截, https直接报证书异常
     @SuppressWarnings("unused")
     private static void readContent1(String securityUrl) throws NoSuchAlgorithmException {
-        HttpHost proxy = new HttpHost("localhost", 8888);
-        DefaultProxyRoutePlanner routePlanner = new DefaultProxyRoutePlanner(proxy);
+        // HttpHost proxy = new HttpHost("localhost", 8888);
+        // DefaultProxyRoutePlanner routePlanner = new
+        // DefaultProxyRoutePlanner(proxy);
 
-        try (CloseableHttpClient client = HttpClients.custom().setRoutePlanner(routePlanner).build();) {
+        try (CloseableHttpClient client = HttpClients.custom()
+                // .setRoutePlanner(routePlanner)
+                .build();) {
             HttpUriRequest request = new HttpGet(securityUrl);
             try (CloseableHttpResponse resp = client.execute(request);) {
                 String respText = EntityUtils.toString(resp.getEntity(), Charset.forName("UTF-8"));
@@ -206,22 +209,24 @@ public class HttpsClientStub {
 
         SSLConnectionSocketFactory sslFactory = new SSLConnectionSocketFactory(sslContext, hostNameVerifier);
 
-        Registry<ConnectionSocketFactory> registry = RegistryBuilder.<ConnectionSocketFactory> create()
+        Registry<ConnectionSocketFactory> registry = RegistryBuilder.<ConnectionSocketFactory>create()
                 .register("http", PlainConnectionSocketFactory.getSocketFactory()) //
                 .register("https", sslFactory) //
                 .build();
         // 设置
-        HttpHost proxy = new HttpHost("localhost", 8888);
+        // HttpHost proxy = new HttpHost("localhost", 8888);
 
-        DefaultProxyRoutePlanner routePlanner = new DefaultProxyRoutePlanner(proxy);
+        // DefaultProxyRoutePlanner routePlanner = new
+        // DefaultProxyRoutePlanner(proxy);
         HttpClientConnectionManager connManager = new BasicHttpClientConnectionManager(registry);
 
-        try (CloseableHttpClient client = HttpClients.custom().setRoutePlanner(routePlanner).setConnectionManager(connManager).build();) {
+        try (CloseableHttpClient client = HttpClients.custom() // .setRoutePlanner(routePlanner)
+                .setConnectionManager(connManager).build();) {
             HttpUriRequest request = new HttpGet(securityUrl);
             try (CloseableHttpResponse resp = client.execute(request);) {
                 String respText = EntityUtils.toString(resp.getEntity(), Charset.forName("UTF-8"));
                 // System.out.println(respText);
-                respText.length();
+                System.out.println("resp length:" + respText.length());
             }
         } catch (IOException e) {
             e.printStackTrace();

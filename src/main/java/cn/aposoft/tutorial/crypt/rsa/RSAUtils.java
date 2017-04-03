@@ -54,7 +54,7 @@ import javax.crypto.NoSuchPaddingException;
  *  
  *  定义  z = (p-1)*(q-1);
  *  
- *  (d*e)mod z=1 等价于 (d * e) -1 = z * n (n 为>=1的正整数)
+ *  (d * e) mod z=1 等价于 (d * e) -1 = z * n (n 为>=1的正整数)
  *  d =  (z * n + 1)  / e  右边表达式必须返回整数
  * </pre>
  * 
@@ -203,11 +203,11 @@ public class RSAUtils {
      *            私钥(BASE64编码)
      * 
      * @return
-     * @throws InvalidKeySpecException 
-     * @throws InvalidKeyException 
-     * @throws SignatureException 
+     * @throws InvalidKeySpecException
+     * @throws InvalidKeyException
+     * @throws SignatureException
      */
-    public static String sign(byte[] data, String privateKey) throws InvalidKeySpecException, InvalidKeyException, SignatureException  {
+    public static String sign(byte[] data, String privateKey) throws InvalidKeySpecException, InvalidKeyException, SignatureException {
         byte[] keyBytes = Base64Utils.decode(privateKey);
         PKCS8EncodedKeySpec pkcs8KeySpec = new PKCS8EncodedKeySpec(keyBytes);
         PrivateKey privateK = keyFactory.generatePrivate(pkcs8KeySpec);
@@ -230,13 +230,13 @@ public class RSAUtils {
      *            数字签名
      * 
      * @return
-     * @throws InvalidKeySpecException 
-     * @throws InvalidKeyException 
-     * @throws SignatureException 
+     * @throws InvalidKeySpecException
+     * @throws InvalidKeyException
+     * @throws SignatureException
      * @throws Exception
      * 
      */
-    public static boolean verify(byte[] data, String publicKey, String sign) throws InvalidKeySpecException, InvalidKeyException, SignatureException  {
+    public static boolean verify(byte[] data, String publicKey, String sign) throws InvalidKeySpecException, InvalidKeyException, SignatureException {
         byte[] keyBytes = Base64Utils.decode(publicKey);
         X509EncodedKeySpec keySpec = new X509EncodedKeySpec(keyBytes);
         PublicKey publicK = keyFactory.generatePublic(keySpec);

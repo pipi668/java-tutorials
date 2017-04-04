@@ -250,16 +250,17 @@ public class HttpsTools {
      * @throws InvalidKeyException
      * @throws SignatureException
      */
-    public static boolean verify(X509Certificate cert, PublicKey pkey)
-            throws NoSuchAlgorithmException, CertificateEncodingException, InvalidKeyException, SignatureException {
+    public static boolean verify(X509Certificate cert, PublicKey pkey) {
+        try {
+            cert.verify(pkey);
+            return true;
+        } catch (CertificateException | NoSuchProviderException//
+                | InvalidKeyException | NoSuchAlgorithmException//
+                | SignatureException e) {
+            e.printStackTrace();
+            return false;
+        }
 
-        byte[] encoded = cert.getEncoded();
-        // 签名
-        byte[] signature = cert.getSignature();
-        Signature signatureAlgorithm = Signature.getInstance(SIGNATURE_ALGORITHM);
-        signatureAlgorithm.initVerify(pkey);
-        signatureAlgorithm.update(encoded);
-        return signatureAlgorithm.verify(signature);
     }
 
     public static void visitKeyStore(KeyStore ks)

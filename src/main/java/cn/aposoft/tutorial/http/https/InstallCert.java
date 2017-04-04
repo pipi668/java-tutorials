@@ -30,6 +30,7 @@ import javax.net.ssl.X509TrustManager;
  * @date 2017年3月28日
  */
 public class InstallCert {
+    // startcom_certification_authority
     public static void main(String[] args) throws Exception {
         String host;
         int port;

@@ -59,11 +59,12 @@ public class HttpsClientStub {
         // String securityUrl =
         // "https://myfen.gomemyf.com/fen-api/goods/?sku=100001911";
         String securityUrlGomeFinance = "https://www.gomefinance.com.cn/";
+        final String aposoft_url = "https://www.aposoft.cn/";
         // readContent1(securityUrl);
 
         // 1 读取公钥证书到本地
         // readContent(securityUrl);
-        readContent(securityUrlGomeFinance);
+        readContent(aposoft_url);
         // defaultManagers();
     }
 

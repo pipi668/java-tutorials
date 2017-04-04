@@ -47,7 +47,7 @@ import cn.aposoft.tutorial.http.https.verifier.DefaultHostnameVerifier;
 public class AposoftHttpsClient {
     public static void main(String[] args) throws NoSuchAlgorithmException, KeyManagementException, CertificateException, FileNotFoundException,
             IOException, KeyStoreException, UnrecoverableKeyException {
-        final String aposoft_url = "https://aposoft.cn:8443/wx/index.jsp";
+        final String aposoft_url = "https://www.aposoft.cn/";
         // SSLContext sslContext = SSLContext.getDefault();
 
         SSLContext sslContext = null;

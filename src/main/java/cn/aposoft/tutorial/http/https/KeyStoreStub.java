@@ -21,8 +21,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import cn.aposoft.tutorial.http.https.selfsign.HttpsTools;
-
 /**
  * @author LiuJian
  * @date 2017年3月29日

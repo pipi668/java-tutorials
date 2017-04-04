@@ -1,23 +1,25 @@
 /**
  *   Copyright  :  www.aposoft.cn
  */
-package cn.aposoft.tutorial.http.https.selfsign;
+package cn.aposoft.tutorial.http.https.dualverified;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.security.KeyManagementException;
+import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
 
 import javax.net.ssl.SSLContext;
 
-import org.apache.http.HttpHost;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
-import org.apache.http.impl.conn.DefaultProxyRoutePlanner;
+import org.apache.http.ssl.SSLContexts;
 import org.apache.http.util.EntityUtils;
 
 import cn.aposoft.tutorial.http.https.HttpsTools;
@@ -27,7 +29,7 @@ import cn.aposoft.tutorial.http.https.HttpsTools;
  * @date 2017年4月3日
  * 
  */
-public class SelfsignHttpClientWithVerify {
+public class SelfsignHttpClient {
 
     /**
      * 
@@ -44,11 +46,8 @@ public class SelfsignHttpClientWithVerify {
      */
     public static void main(String[] args)
             throws IOException, KeyManagementException, NoSuchAlgorithmException, KeyStoreException, CertificateException {
-
-        SSLContext sslContext = HttpsTools.createCertificateSnifferSSLContext();
-        try (CloseableHttpClient client = HttpClients.custom()//
-
-                .setSSLContext(sslContext).build();) {
+        SSLContext sslContext = HttpsTools.createSSLContext();
+        try (CloseableHttpClient client = HttpClients.custom().setSSLContext(sslContext).build();) {
             final String aposoft_url = "https://aposoft.cn:8443/wx/index.jsp";
             HttpGet get = new HttpGet(aposoft_url);
             // 执行远程请求,并输出结果

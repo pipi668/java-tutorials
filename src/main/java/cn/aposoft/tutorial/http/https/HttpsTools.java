@@ -7,6 +7,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.security.InvalidKeyException;
+import java.security.Key;
 import java.security.KeyManagementException;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
@@ -17,6 +18,7 @@ import java.security.Provider;
 import java.security.PublicKey;
 import java.security.Signature;
 import java.security.SignatureException;
+import java.security.UnrecoverableKeyException;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateEncodingException;
 import java.security.cert.CertificateException;
@@ -107,9 +109,10 @@ public class HttpsTools {
      * @throws CertificateException
      * @throws FileNotFoundException
      * @throws IOException
+     * @throws UnrecoverableKeyException
      */
-    public static SSLContext createPKCS12CertificateSnifferSSLContext()
-            throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException, CertificateException, FileNotFoundException, IOException {
+    public static SSLContext createPKCS12CertificateSnifferSSLContext() throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException,
+            CertificateException, FileNotFoundException, IOException, UnrecoverableKeyException {
         // PKIX
         // System.out.println(TrustManagerFactory.getDefaultAlgorithm());
 
@@ -122,6 +125,23 @@ public class HttpsTools {
 
         SSLContext sslContext = SSLContexts.custom()//
                 .loadTrustMaterial(truststore, strategy) //
+                .build();
+        return sslContext;
+    }
+
+    public static SSLContext createDualSSLContext() throws KeyStoreException, NoSuchAlgorithmException, CertificateException, FileNotFoundException,
+            IOException, KeyManagementException, UnrecoverableKeyException {
+        // 加载自签名授信证书
+        final KeyStore truststore = KeyStore.getInstance("JKS");
+        truststore.load(new FileInputStream("f:/key/trust-client.jks"), "changeit".toCharArray());
+
+        final KeyStore keystore = KeyStore.getInstance("PKCS12");
+        keystore.load(new FileInputStream("f:/key/privateKey.p12"), "changeit".toCharArray());
+        HttpsTools.visitKeyStore(keystore);
+
+        SSLContext sslContext = SSLContexts.custom()//
+                .loadTrustMaterial(truststore, null) //
+                .loadKeyMaterial(keystore, "changeit".toCharArray())//
                 .build();
         return sslContext;
     }
@@ -242,7 +262,8 @@ public class HttpsTools {
         return signatureAlgorithm.verify(signature);
     }
 
-    public static void visitKeyStore(KeyStore ks) throws KeyStoreException, CertificateEncodingException, CertificateParsingException {
+    public static void visitKeyStore(KeyStore ks)
+            throws KeyStoreException, CertificateEncodingException, CertificateParsingException, UnrecoverableKeyException, NoSuchAlgorithmException {
         System.out.println("--getClass:\t" + ks.getClass());
         // keystore type: jks, pkcs12, pkcs8 等
         System.out.println("--getType:\t" + ks.getType());
@@ -263,6 +284,12 @@ public class HttpsTools {
                     System.out.println("----Parents:");
                     getIssuerCertificate((X509Certificate) cert, ks);
                 }
+            } else if (ks.isKeyEntry(alias)) {
+                Key key = ks.getKey(alias, "changeit".toCharArray());
+                System.out.println("Class:" + key.getClass().getName());
+                System.out.println("Algorithm:" + key.getAlgorithm());
+                System.out.println("Format:" + key.getFormat());
+                System.out.println("Total Content:" + key.toString());
             }
             System.out.println("----End Alias:\t" + alias + ",\tType:\t" + (ks.isCertificateEntry(alias) ? "Certificate" : "KEY"));
             System.out.println();

@@ -8,6 +8,7 @@ import java.nio.charset.StandardCharsets;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
+import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
 
 import javax.net.ssl.SSLContext;
@@ -41,9 +42,10 @@ public class SelfsignHttpClientWithPKCS12Certificate {
      * @throws KeyStoreException
      * @throws NoSuchAlgorithmException
      * @throws KeyManagementException
+     * @throws UnrecoverableKeyException 
      */
     public static void main(String[] args)
-            throws IOException, KeyManagementException, NoSuchAlgorithmException, KeyStoreException, CertificateException {
+            throws IOException, KeyManagementException, NoSuchAlgorithmException, KeyStoreException, CertificateException, UnrecoverableKeyException {
 
         SSLContext sslContext = HttpsTools.createPKCS12CertificateSnifferSSLContext();
         try (CloseableHttpClient client = HttpClients.custom()//

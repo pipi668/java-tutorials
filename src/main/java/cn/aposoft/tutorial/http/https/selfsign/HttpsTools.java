@@ -12,15 +12,26 @@ import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
+import java.security.Principal;
+import java.security.Provider;
 import java.security.PublicKey;
 import java.security.Signature;
 import java.security.SignatureException;
+import java.security.cert.Certificate;
 import java.security.cert.CertificateEncodingException;
 import java.security.cert.CertificateException;
+import java.security.cert.CertificateParsingException;
 import java.security.cert.X509Certificate;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Enumeration;
+import java.util.List;
+import java.util.Map.Entry;
 
 import javax.net.ssl.SSLContext;
 
+import org.apache.commons.codec.binary.Base64;
 import org.apache.http.ssl.SSLContexts;
 import org.apache.http.ssl.TrustStrategy;
 
@@ -105,7 +116,10 @@ public class HttpsTools {
         // 加载自签名授信证书
         final KeyStore truststore = KeyStore.getInstance("PKCS12");
         truststore.load(new FileInputStream("f:/key/trust-client.p12"), "changeit".toCharArray());
+        visitKeyStore(truststore);
+
         TrustStrategy strategy = createSnifferStrategy();
+
         SSLContext sslContext = SSLContexts.custom()//
                 .loadTrustMaterial(truststore, strategy) //
                 .build();
@@ -226,5 +240,170 @@ public class HttpsTools {
         signatureAlgorithm.initVerify(pkey);
         signatureAlgorithm.update(encoded);
         return signatureAlgorithm.verify(signature);
+    }
+
+    public static void visitKeyStore(KeyStore ks) throws KeyStoreException, CertificateEncodingException, CertificateParsingException {
+        System.out.println("--getClass:\t" + ks.getClass());
+        // keystore type: jks, pkcs12, pkcs8 等
+        System.out.println("--getType:\t" + ks.getType());
+        // size:
+        System.out.println("--size:\t" + ks.size());
+        Provider provider = ks.getProvider();
+        // visitProvider(provider);
+
+        Enumeration<String> aliases = ks.aliases();
+        while (aliases.hasMoreElements()) {
+            String alias = aliases.nextElement();
+
+            System.out.println("----Begin Alias:\t" + alias + ",\tType:\t" + (ks.isCertificateEntry(alias) ? "Certificate" : "KEY"));
+            if (ks.isCertificateEntry(alias)) {
+                Certificate cert = ks.getCertificate(alias);
+                visitCertificate(cert);
+                if (cert instanceof X509Certificate) {
+                    System.out.println("----Parents:");
+                    getIssuerCertificate((X509Certificate) cert, ks);
+                }
+            }
+            System.out.println("----End Alias:\t" + alias + ",\tType:\t" + (ks.isCertificateEntry(alias) ? "Certificate" : "KEY"));
+            System.out.println();
+            System.out.println();
+            System.out.println();
+
+        }
+
+    }
+
+    private static void getIssuerCertificate(X509Certificate cert, KeyStore ks)
+            throws KeyStoreException, CertificateEncodingException, CertificateParsingException {
+        String alias = ks.getCertificateAlias(cert);
+        System.out.println();
+        System.out.println();
+        System.out.println();
+        System.out.println("alias:" + alias);
+
+        Principal principal = cert.getIssuerDN();
+
+        int i = 0;
+        while (principal != null && i++ < 5) {
+            X509Certificate x509 = getCertificate(principal, ks);
+            System.out.println();
+            System.out.println("i=" + i);
+            System.out.println();
+            visitCertificate((Certificate) x509);
+            if (x509.getIssuerDN().equals(x509.getSubjectDN())) {
+                break;
+            }
+            principal = x509.getIssuerDN();
+        }
+    }
+
+    public static X509Certificate getCertificate(Principal principal, KeyStore ks) throws KeyStoreException {
+        Enumeration<String> aliases = ks.aliases();
+
+        while (aliases.hasMoreElements()) {
+            String alias = aliases.nextElement();
+            if (ks.isCertificateEntry(alias)) {
+                Certificate cert = ks.getCertificate(alias);
+                if (cert instanceof X509Certificate) {
+                    X509Certificate x509 = (X509Certificate) cert;
+                    if (x509.getSubjectDN().equals(principal)) {
+                        return x509;
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+    public static X509Certificate[] getX509CertificateChain(String alias, KeyStore ks) throws KeyStoreException {
+        List<X509Certificate> certList = new ArrayList<>();
+
+        X509Certificate cert = (X509Certificate) ks.getCertificate(alias);
+        certList.add(cert);
+
+        // 遍历根证书
+
+        Principal principal = cert.getIssuerDN();
+
+        while (principal != null) {
+            X509Certificate x509 = HttpsTools.getCertificate(principal, ks);
+            certList.add(x509);
+            if (x509.getIssuerDN().equals(x509.getSubjectDN())) {
+                System.out.println("meets root.");
+                break;
+            }
+            principal = x509.getIssuerDN();
+        }
+        Collections.reverse(certList);
+        return certList.toArray(new X509Certificate[0]);
+    }
+
+    public static void visitCertificate(Certificate certificate) throws CertificateEncodingException, CertificateParsingException {
+        System.out.println("--------Type:\t" + certificate.getType());
+        System.out.println("-------Class:\t" + certificate.getClass());
+        System.out.println("--------Public Key:\t" + certificate.getPublicKey());
+        System.out.println("--------Encoded:\t" + certificate.getEncoded().length);
+        if (certificate instanceof X509Certificate) {
+            visitX509Certificate((X509Certificate) certificate);
+        }
+    }
+
+    public static void visitX509Certificate(X509Certificate certificate) throws CertificateEncodingException, CertificateParsingException {
+        System.out.println("--------Version:\t" + certificate.getVersion());
+        System.out.println("--------SerialNumber:\t" + certificate.getSerialNumber());
+
+        System.out.println("--------IssuerUniqueID:\t" + certificate.getIssuerUniqueID());
+        System.out.println("--------IssuerDN:\t" + certificate.getIssuerDN());
+        System.out.println("--------IssuerX500:\t" + certificate.getIssuerX500Principal());
+
+        System.out.println("--------SubjectUniqueID:\t" + certificate.getSubjectUniqueID());
+        System.out.println("--------SubjectDN:\t" + certificate.getSubjectDN());
+        System.out.println("--------SubjectX500:\t" + certificate.getSubjectX500Principal());
+
+        System.out.println("--------Dates between:\t" + certificate.getNotBefore() + " and " + certificate.getNotAfter());
+
+        System.out.println("--------Signature:\t" + Base64.encodeBase64String(certificate.getSignature()));
+
+        System.out.println("--------Signature Algorithm Name:\t" + certificate.getSigAlgName());
+
+        System.out.println("--------Signature Algorithm OID:\t" + certificate.getSigAlgOID());
+
+        System.out.println("--------BasicConstraints:\t" + certificate.getBasicConstraints());
+
+        //
+        if (certificate.getCriticalExtensionOIDs() != null) {
+            System.out.println("--------CriticalExtensionOIDs:\t" + Arrays.toString(certificate.getCriticalExtensionOIDs().toArray()));
+        }
+        //
+        if (certificate.getExtendedKeyUsage() != null) {
+            System.out.println("--------ExtendedKeyUsage:\t" + Arrays.toString(certificate.getExtendedKeyUsage().toArray()));
+        }
+        //
+        if (certificate.getIssuerAlternativeNames() != null) {
+            System.out.println("--------IssuerAlternativeNames:\t" + Arrays.toString(certificate.getIssuerAlternativeNames().toArray()));
+        }
+        //
+        if (certificate.getSubjectAlternativeNames() != null) {
+            System.out.println("--------SubjectAlternativeNames:\t" + Arrays.toString(certificate.getSubjectAlternativeNames().toArray()));
+        }
+
+    }
+
+    private static void visitProvider(Provider provider) throws KeyStoreException {
+        System.out.println("--Provider:\t" + provider.getName());
+        System.out.println("----Info:\t" + provider.getInfo());
+        System.out.println("----Version:\t" + provider.getVersion());
+        System.out.println("----Class:\t" + provider.getClass());
+        System.out.println("----EntrySet:\t" + provider.entrySet().size());
+        // for (Entry<Object, Object> entry : provider.entrySet()) {
+        // // visitProviderEntry(entry);
+        // }
+
+    }
+
+    private static void visitProviderEntry(Entry<Object, Object> entry) {
+        System.out.println("----Entry:" + entry.getKey());
+        System.out.println("----Entry-V:" + entry.getValue());
+        System.out.println();
     }
 }

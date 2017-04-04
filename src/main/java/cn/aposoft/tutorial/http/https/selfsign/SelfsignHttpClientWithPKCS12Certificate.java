@@ -42,12 +42,9 @@ public class SelfsignHttpClientWithPKCS12Certificate {
      */
     public static void main(String[] args)
             throws IOException, KeyManagementException, NoSuchAlgorithmException, KeyStoreException, CertificateException {
-        HttpHost proxy = new HttpHost("localhost", 8888);
-        DefaultProxyRoutePlanner routePlanner = new DefaultProxyRoutePlanner(proxy);
 
         SSLContext sslContext = HttpsTools.createPKCS12CertificateSnifferSSLContext();
         try (CloseableHttpClient client = HttpClients.custom()//
-                .setRoutePlanner(routePlanner)//
                 .setSSLContext(sslContext).build();) {
             final String aposoft_url = "https://aposoft.cn:8443/wx/index.jsp";
             HttpGet get = new HttpGet(aposoft_url);

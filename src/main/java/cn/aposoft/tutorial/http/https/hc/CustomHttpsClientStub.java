@@ -1,7 +1,7 @@
 /**
  *   Copyright  :  www.aposoft.cn
  */
-package cn.aposoft.tutorial.http.https.cus;
+package cn.aposoft.tutorial.http.https.hc;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -31,32 +31,35 @@ public class CustomHttpsClientStub {
     public static void main(String[] args) {
         final String gomefinanceUrl = "https://www.gomefinance.com.cn/";
 
-        interrupt();
+
         SSLConnectionSocketFactory socketFacotry = SSLConnectionSocketFactory.getSocketFactory();
-        interrupt();
+
         Registry<ConnectionSocketFactory> registry = RegistryBuilder.<ConnectionSocketFactory>create().register("https", socketFacotry).build();
-        interrupt();
+
         HttpClientConnectionManager connManager = new BasicHttpClientConnectionManager(registry);
-        interrupt();
+
         try (MinimalHttpClient client = new MinimalHttpClient(connManager);) {
-            interrupt();
+
             System.out.println();
             System.out.println(gomefinanceUrl);
             System.out.println();
             HttpGet httpGet = new HttpGet(gomefinanceUrl);
-            interrupt();
-            try (CloseableHttpResponse response = client.execute(httpGet);) {
-                interrupt();
 
-                interrupt();
+            try (CloseableHttpResponse response = client.execute(httpGet);) {
+
                 HttpEntity entity = response.getEntity();
-                interrupt();
+          
                 String responseText = EntityUtils.toString(entity, StandardCharsets.UTF_8);
-                interrupt();
                 System.out.println();
                 System.out.println(responseText);
                 System.out.println();
             } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            try {
+                Thread.sleep(1000 * 1000);
+            } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }

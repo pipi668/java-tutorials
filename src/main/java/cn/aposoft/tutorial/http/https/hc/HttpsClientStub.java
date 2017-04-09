@@ -1,7 +1,7 @@
 /**
  *   Copyright  :  www.aposoft.cn
  */
-package cn.aposoft.tutorial.http.https;
+package cn.aposoft.tutorial.http.https.hc;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -18,7 +18,6 @@ import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLContextSpi;
 
-import org.apache.http.HttpHost;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpUriRequest;
@@ -31,7 +30,6 @@ import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.conn.BasicHttpClientConnectionManager;
-import org.apache.http.impl.conn.DefaultProxyRoutePlanner;
 import org.apache.http.util.EntityUtils;
 
 import cn.aposoft.tutorial.http.https.verifier.DefaultHostnameVerifier;
@@ -64,7 +62,9 @@ public class HttpsClientStub {
 
         // 1 读取公钥证书到本地
         // readContent(securityUrl);
-        readContent(aposoft_url);
+        // readContent(aposoft_url);
+        readContent(securityUrlGomeFinance);
+
         // defaultManagers();
     }
 
@@ -78,12 +78,9 @@ public class HttpsClientStub {
                 method.setAccessible(true);
                 try {
                     Object obj = method.invoke(null);
-                    System.out.println(obj.getClass().getName());
                     if (obj instanceof javax.net.ssl.KeyManager[]) {
                         javax.net.ssl.KeyManager[] keyManagers = (javax.net.ssl.KeyManager[]) obj;
                         for (javax.net.ssl.KeyManager km : keyManagers) {
-
-                            System.out.println(km.getClass().getName());
 
                             Field field = km.getClass().getDeclaredField("credentialsMap");
 
@@ -94,8 +91,6 @@ public class HttpsClientStub {
                                 if (credentialsMap instanceof Map) {
                                     @SuppressWarnings("unchecked")
                                     Map<String, Object> map = (Map<String, Object>) credentialsMap;
-                                    System.out.println(credentialsMap.getClass().getName());
-                                    System.out.println(map.keySet().toString());
                                 }
 
                             }
@@ -121,11 +116,9 @@ public class HttpsClientStub {
             method.setAccessible(true);
             try {
                 Object obj = method.invoke(null);
-                System.out.println(obj.getClass().getName());
                 if (obj instanceof javax.net.ssl.TrustManager[]) {
                     javax.net.ssl.TrustManager[] keyManagers = (javax.net.ssl.TrustManager[]) obj;
                     for (javax.net.ssl.TrustManager km : keyManagers) {
-                        System.out.println(km.getClass().getName());
 
                         Field field = km.getClass().getDeclaredField("trustedCerts");
 
@@ -136,9 +129,7 @@ public class HttpsClientStub {
                             if (certificateSet instanceof Set) {
                                 @SuppressWarnings("unchecked")
                                 Set<X509Certificate> set = (Set<X509Certificate>) certificateSet;
-                                System.out.println(certificateSet.getClass().getName());
-                                System.out.println(set.toString());
-                                System.out.println(set.size());
+
                             }
 
                         }
@@ -171,12 +162,10 @@ public class HttpsClientStub {
             HttpUriRequest request = new HttpGet(securityUrl);
             try (CloseableHttpResponse resp = client.execute(request);) {
                 String respText = EntityUtils.toString(resp.getEntity(), Charset.forName("UTF-8"));
-                // System.out.println(respText);
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
-        System.out.println();
     }
 
     // 加拦截,直接报证书异常
@@ -192,7 +181,6 @@ public class HttpsClientStub {
                     Object o = field.get(sslContext);
                     if (o instanceof SSLContextSpi) {
                         SSLContextSpi spi = (SSLContextSpi) o;
-                        System.out.println(spi.getClass().getName());
                     }
 
                 }
@@ -226,13 +214,14 @@ public class HttpsClientStub {
             HttpUriRequest request = new HttpGet(securityUrl);
             try (CloseableHttpResponse resp = client.execute(request);) {
                 String respText = EntityUtils.toString(resp.getEntity(), Charset.forName("UTF-8"));
-                // System.out.println(respText);
-                System.out.println("resp length:" + respText.length());
             }
+
+            Thread.sleep(1000 * 3600);
         } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
-        System.out.println();
     }
 }

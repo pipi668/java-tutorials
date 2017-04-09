@@ -368,6 +368,7 @@ public class SSLConnectionSocketFactory implements LayeredConnectionSocketFactor
         prepareSocket(sslsock);
         this.log.debug("Starting handshake");
         sslsock.startHandshake();
+        // System.in.read();
         verifyHostname(sslsock, target);
         return sslsock;
     }

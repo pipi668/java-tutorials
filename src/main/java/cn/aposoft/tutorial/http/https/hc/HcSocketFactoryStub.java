@@ -1,78 +1,124 @@
 package cn.aposoft.tutorial.http.https.hc;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.Reader;
+import java.io.Writer;
 import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
 import java.security.cert.Certificate;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import javax.net.SocketFactory;
+import javax.net.ssl.HandshakeCompletedEvent;
+import javax.net.ssl.HandshakeCompletedListener;
 import javax.net.ssl.SSLHandshakeException;
+import javax.net.ssl.SSLPeerUnverifiedException;
 import javax.net.ssl.SSLSession;
 import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
 import javax.security.auth.x500.X500Principal;
 
-import org.apache.http.HttpHost;
-import org.apache.http.config.SocketConfig;
-import org.apache.http.protocol.HttpContext;
-import org.apache.http.util.Args;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 public class HcSocketFactoryStub {
+    private final static String CRLF = "\r\n";
+    private final static String REQUEST_HEADER = createRequestHeader();
+    private static final String[] EMPTY_STRING_ARRAY = new String[0];
+    private final static Log log = LogFactory.getLog(HcSocketFactoryStub.class);
+
+    public static String createRequestHeader() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("GET / HTTP/1.1").append(CRLF);
+        builder.append("Host: www.gomefinance.com.cn").append(CRLF);
+        builder.append("Connection: Keep-Alive").append(CRLF);
+        builder.append("User-Agent: Apache-HttpClient/4.5.3 (Java/1.7.0_80)").append(CRLF)//
+                .append(CRLF);
+        return builder.toString();
+    }
 
     /**
+     * www.gomefinance.com.cn 10.141.4.154 fen.gomemyf.com [118.26.23.108]
      * 
      * @param args
      */
     public static void main(String[] args) {
+        try (Socket socket = connectSocket("www.gomefinance.com.cn", 443, new InetSocketAddress(0));) {
+            // System.in.read();
+            System.out.println("socket created...");
+            try (OutputStream output = socket.getOutputStream(); InputStream input = socket.getInputStream();) {
+                try (Writer writer = new BufferedWriter(new OutputStreamWriter(output, StandardCharsets.UTF_8));
+                        Reader reader = new BufferedReader(new InputStreamReader(input, StandardCharsets.UTF_8));) {
+                    System.out.println(output.getClass().getName());
 
+                    System.out.println("write " + REQUEST_HEADER);
+                    writer.write(REQUEST_HEADER);
+                    writer.flush();
+                    System.out.println("write finished.");
+                    response(input);
+                    // response(reader);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
-    private final javax.net.ssl.SSLSocketFactory socketfactory = (SSLSocketFactory) SSLSocketFactory.getDefault();
-    private final static String[] EMPTY_STRING_ARRAY = new String[0];
+    private static void response(InputStream input) {
+        System.out.println("read response...");
+        System.out.println(input.getClass().getName()); // sun.security.ssl.AppInputStream
 
-    public Socket createSocket(final HttpContext context) throws IOException {
-        return SocketFactory.getDefault().createSocket();
+        int i;
+        while (true) {
+            try {
+                if (input.available() > 0) {
+                    i = input.read();
+                    if (i != -1) {
+                        System.out.print('[' + i + ']');
+                    } else {
+                        break;
+                    }
+                } else {
+                    Thread.yield();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+                break;
+            }
+        }
     }
 
-    public Socket prepareSocket(Socket socket, final SocketConfig socketConfig) throws IOException {
-
-        socket.setSoTimeout(socketConfig.getSoTimeout());
-        socket.setReuseAddress(socketConfig.isSoReuseAddress());
-        socket.setTcpNoDelay(socketConfig.isTcpNoDelay());
-        socket.setKeepAlive(socketConfig.isSoKeepAlive());
-        if (socketConfig.getRcvBufSize() > 0) {
-            socket.setReceiveBufferSize(socketConfig.getRcvBufSize());
+    private static void response(Reader reader) {
+        System.out.println("waiting response...");
+        int c = -1;
+        try {
+            while ((c = reader.read()) != -1) {
+                System.out.print(c);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        if (socketConfig.getSndBufSize() > 0) {
-            socket.setSendBufferSize(socketConfig.getSndBufSize());
-        }
-
-        final int linger = socketConfig.getSoLinger();
-        if (linger >= 0) {
-            socket.setSoLinger(true, linger);
-        }
-        return socket;
     }
 
-    public Socket connectSocket(final int connectTimeout, final Socket socket, final HttpHost host, final InetSocketAddress remoteAddress,
-            final InetSocketAddress localAddress, final HttpContext context) throws IOException {
-        Args.notNull(host, "HTTP host");
-        Args.notNull(remoteAddress, "Remote address");
-        final Socket sock = socket != null ? socket : createSocket(context);
+    public static Socket connectSocket(final String remoteHost, final int remotePort, final InetSocketAddress localAddress) throws IOException {
+        final Socket sock = createSocket();
         if (localAddress != null) {
             sock.bind(localAddress);
         }
+        System.out.println("sock bind.");
         try {
-            if (connectTimeout > 0 && sock.getSoTimeout() == 0) {
-                sock.setSoTimeout(connectTimeout);
-            }
-
-            sock.connect(remoteAddress, connectTimeout);
+            sock.connect(new InetSocketAddress(remoteHost, remotePort));
+            System.out.println("Socket is connected:" + sock.isConnected());
+            return createLayeredSocket(sock, remoteHost, remotePort);
         } catch (final IOException ex) {
             try {
                 sock.close();
@@ -80,20 +126,18 @@ public class HcSocketFactoryStub {
             }
             throw ex;
         }
-        // Setup SSL layering if necessary
-        if (sock instanceof SSLSocket) {
-            final SSLSocket sslsock = (SSLSocket) sock;
-            sslsock.startHandshake();
-            verifyHostname(sslsock, host.getHostName());
-            return sock;
-        } else {
-            // create SSLSocket over PlainSocket
-            return createLayeredSocket(sock, host.getHostName(), remoteAddress.getPort(), context);
-        }
+
     }
 
-    public Socket createLayeredSocket(final Socket socket, final String target, final int port, final HttpContext context) throws IOException {
-        final SSLSocket sslsock = (SSLSocket) this.socketfactory.createSocket(socket, target, port, true);
+    public static Socket createSocket() throws IOException {
+        // Socket socket = SocketFactory.getDefault().createSocket();
+        Socket socket = new SocketSniffer();
+        return socket;
+    }
+
+    public static Socket createLayeredSocket(final Socket socket, final String remoteHost, final int remotePort) throws IOException {
+
+        final SSLSocket sslsock = (SSLSocket) ((SSLSocketFactory) SSLSocketFactory.getDefault()).createSocket(socket, remoteHost, remotePort, true);
         final String[] allProtocols = sslsock.getSupportedProtocols();
 
         final List<String> enabledProtocols = new ArrayList<String>(allProtocols.length);
@@ -102,26 +146,50 @@ public class HcSocketFactoryStub {
                 enabledProtocols.add(protocol);
             }
         }
+
         if (!enabledProtocols.isEmpty()) {
             sslsock.setEnabledProtocols(enabledProtocols.toArray(EMPTY_STRING_ARRAY));
         }
+        HandshakeCompletedListener listener = new HandshakeCompletedListener() {
 
+            @Override
+            public void handshakeCompleted(HandshakeCompletedEvent event) {
+                System.out.println("handshake successful.");
+                try {
+                    System.out.println(event.getPeerCertificates());
+                    System.out.println(event.getPeerPrincipal());
+                    System.out.println(event.getCipherSuite());
+
+                } catch (SSLPeerUnverifiedException e) {
+                    e.printStackTrace();
+                }
+                sslsock.removeHandshakeCompletedListener(this);
+                System.out.println("listener is removed.");
+            }
+
+        };
+        sslsock.addHandshakeCompletedListener(listener);
+        System.out.println("before hand shake.");
         sslsock.startHandshake();
-        verifyHostname(sslsock, target);
+        verifyHostname(sslsock, remoteHost);
         return sslsock;
     }
 
-    private void verifyHostname(final SSLSocket sslsock, final String hostname) throws IOException {
+    private static void verifyHostname(SSLSocket sslsock, String remoteHost) {
         try {
             SSLSession session = sslsock.getSession();
             if (session == null) {
-
+                // In our experience this only happens under IBM 1.4.x when
+                // spurious (unrelated) certificates show up in the server'
+                // chain. Hopefully this will unearth the real problem:
                 final InputStream in = sslsock.getInputStream();
                 in.available();
-
+                // If ssl.getInputStream().available() didn't cause an
+                // exception, maybe at least now the session is available?
                 session = sslsock.getSession();
                 if (session == null) {
-
+                    // If it's still null, probably a startHandshake() will
+                    // unearth the real problem.
                     sslsock.startHandshake();
                     session = sslsock.getSession();
                 }
@@ -130,42 +198,50 @@ public class HcSocketFactoryStub {
                 throw new SSLHandshakeException("SSL session not available");
             }
 
-            try {
+            if (log.isDebugEnabled()) {
+                log.debug("Secure session established");
+                log.debug(" negotiated protocol: " + session.getProtocol());
+                log.debug(" negotiated cipher suite: " + session.getCipherSuite());
 
-                final Certificate[] certs = session.getPeerCertificates();
-                final X509Certificate x509 = (X509Certificate) certs[0];
-                final X500Principal peer = x509.getSubjectX500Principal();
+                try {
 
-                final Collection<List<?>> altNames1 = x509.getSubjectAlternativeNames();
-                if (altNames1 != null) {
-                    final List<String> altNames = new ArrayList<String>();
-                    for (final List<?> aC : altNames1) {
-                        if (!aC.isEmpty()) {
-                            altNames.add((String) aC.get(1));
+                    final Certificate[] certs = session.getPeerCertificates();
+                    final X509Certificate x509 = (X509Certificate) certs[0];
+                    final X500Principal peer = x509.getSubjectX500Principal();
+
+                    log.debug(" peer principal: " + peer.toString());
+                    final Collection<List<?>> altNames1 = x509.getSubjectAlternativeNames();
+                    if (altNames1 != null) {
+                        final List<String> altNames = new ArrayList<String>();
+                        for (final List<?> aC : altNames1) {
+                            if (!aC.isEmpty()) {
+                                altNames.add((String) aC.get(1));
+                            }
                         }
+                        log.debug(" peer alternative names: " + altNames);
                     }
-                }
 
-                final X500Principal issuer = x509.getIssuerX500Principal();
-                final Collection<List<?>> altNames2 = x509.getIssuerAlternativeNames();
-                if (altNames2 != null) {
-                    final List<String> altNames = new ArrayList<String>();
-                    for (final List<?> aC : altNames2) {
-                        if (!aC.isEmpty()) {
-                            altNames.add((String) aC.get(1));
+                    final X500Principal issuer = x509.getIssuerX500Principal();
+                    log.debug(" issuer principal: " + issuer.toString());
+                    final Collection<List<?>> altNames2 = x509.getIssuerAlternativeNames();
+                    if (altNames2 != null) {
+                        final List<String> altNames = new ArrayList<String>();
+                        for (final List<?> aC : altNames2) {
+                            if (!aC.isEmpty()) {
+                                altNames.add((String) aC.get(1));
+                            }
                         }
+                        log.debug(" issuer alternative names: " + altNames);
                     }
+                } catch (final Exception ignore) {
                 }
-            } catch (final Exception ignore) {
             }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
 
-        } catch (final IOException iox) {
-            // close the socket before re-throwing the exception
-            try {
-                sslsock.close();
-            } catch (final Exception x) {
-                /* ignore */ }
-            throw iox;
         }
+
     }
+
 }

@@ -1,6 +1,5 @@
 package cn.aposoft.http.impl.execchain;
 
-
 import java.io.IOException;
 import java.io.InterruptedIOException;
 import java.net.URI;
@@ -171,7 +170,12 @@ public class MinimalClientExec implements ClientExecChain {
             context.setAttribute(HttpClientContext.HTTP_ROUTE, route);
 
             httpProcessor.process(request, context);
+            // org.apache.http.protocol.HttpRequestExecutor
+            System.out.println("requestExecutor Name:" + requestExecutor.getClass().getName());
+            // org.apache.http.impl.conn.LoggingManagedHttpClientConnection
+            System.out.println("managedConn Name:" + managedConn.getClass().getName());
             final HttpResponse response = requestExecutor.execute(request, managedConn, context);
+            //
             httpProcessor.process(response, context);
 
             // The connection is in or can be brought to a re-usable state.

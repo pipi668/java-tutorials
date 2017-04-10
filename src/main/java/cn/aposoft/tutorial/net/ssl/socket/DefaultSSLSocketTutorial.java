@@ -13,12 +13,13 @@ import java.net.UnknownHostException;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
+import javax.net.ssl.HandshakeCompletedEvent;
+import javax.net.ssl.HandshakeCompletedListener;
 import javax.net.ssl.SSLSession;
 import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.http.impl.client.HttpClients;
 
 /**
  * @author LiuJian
@@ -31,8 +32,14 @@ public class DefaultSSLSocketTutorial {
      * @param args
      */
     public static void main(String[] args) {
+        final HandshakeCompletedListener listener = new HandshakeCompletedListener() {
 
-        HttpClients.createMinimal();
+            @Override
+            public void handshakeCompleted(HandshakeCompletedEvent paramHandshakeCompletedEvent) {
+                System.out.println("handshake successful...");
+            }
+        };
+
         SSLSocketFactory sslFactory = (SSLSocketFactory) SSLSocketFactory.getDefault();
         try (SSLSocket sslSocket = (SSLSocket) sslFactory.createSocket("www.gomefinance.com.cn", 443);) {
             // System.out.println("SupportedCipherSuites:" +
@@ -50,8 +57,12 @@ public class DefaultSSLSocketTutorial {
 
             // useful in server mode
             System.out.println("NeedClientAuth:" + sslSocket.getNeedClientAuth());
+
+            System.out.println("is connected:" + sslSocket.isConnected());
+            sslSocket.addHandshakeCompletedListener(listener);
+            System.out.println("Start handshake...");
             sslSocket.startHandshake();
-            System.out.println();
+            System.out.println("After handshake...");
 
             SSLSession session = sslSocket.getSession();
             System.out.println("CipherSuite:" + session.getCipherSuite());

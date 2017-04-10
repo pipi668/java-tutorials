@@ -26,9 +26,16 @@ public class UtcDateFormatTest {
 
     @Test
     public void formatUtcString() {
-        Date date = new Date();
-        System.out.println(formatter.format(date));
-        Assert.assertEquals("2016-04-06T09:46:06.866Z", formatter.format(date));
+        Date date;
+        try {
+            date = formatter.parse("2016-04-06T09:46:06.000Z");
+            System.out.println(formatter.format(date));
+            Assert.assertEquals("2016-04-06T09:46:06.000Z", formatter.format(date));
+        } catch (ParseException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
     }
 
     /**
@@ -103,7 +110,6 @@ public class UtcDateFormatTest {
             e.printStackTrace();
         }
     }
-
 
     /**
      * 展示全部TimeZoneIDs

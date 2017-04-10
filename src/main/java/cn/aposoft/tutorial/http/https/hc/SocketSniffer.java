@@ -21,6 +21,12 @@ public class SocketSniffer extends Socket {
     static final Logger logger = LoggerFactory.getLogger(SocketSniffer.class);
 
     @Override
+    public synchronized void close() throws IOException {
+        logger.debug("socket is closed.");
+        super.close();
+    }
+
+    @Override
     public void connect(SocketAddress endpoint) throws IOException {
         logger.debug("connected to " + endpoint);
         super.connect(endpoint);

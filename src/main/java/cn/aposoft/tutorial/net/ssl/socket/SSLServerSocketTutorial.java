@@ -19,6 +19,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicLong;
 
 import javax.net.ServerSocketFactory;
+import javax.net.ssl.HandshakeCompletedEvent;
+import javax.net.ssl.HandshakeCompletedListener;
 import javax.net.ssl.SSLServerSocket;
 import javax.net.ssl.SSLServerSocketFactory;
 import javax.net.ssl.SSLSocket;
@@ -40,7 +42,13 @@ public class SSLServerSocketTutorial {
      * @param args
      */
     public static void main(String[] args) {
+        final HandshakeCompletedListener listener = new HandshakeCompletedListener() {
 
+            @Override
+            public void handshakeCompleted(HandshakeCompletedEvent paramHandshakeCompletedEvent) {
+                System.out.println("handshake successful...");
+            }
+        };
         executor.execute(new Runnable() {
             @Override
             public void run() {
@@ -51,11 +59,12 @@ public class SSLServerSocketTutorial {
                     System.out.println("EnabledCipherSuites:" + Arrays.toString(sslServerSocket.getEnabledCipherSuites()));
                     System.out.println(sslServerSocket.getClass().getName());
                     System.out.println("Seversocket is waiting in board...");
+
                     while (isRunning) {
                         SSLSocket socket = (SSLSocket) sslServerSocket.accept();
+                        System.out.println("Socket accepted...");
                         System.out.println("clientMode:" + socket.getUseClientMode());
-                        socket.setUseClientMode(false);
-
+                        socket.addHandshakeCompletedListener(listener);
                         executor.execute(new SSLHandShakeWorker(socket));
                         // executor.execute(new Worker(socket));
                     }
@@ -66,9 +75,8 @@ public class SSLServerSocketTutorial {
 
         });
 
-        int recv = -1;
         try {
-            while ((recv = System.in.read()) != 'q') {
+            while ((System.in.read()) != 'q') {
 
             }
 
@@ -92,21 +100,7 @@ public class SSLServerSocketTutorial {
 
         @Override
         public void run() {
-            long curr = longSeeds.incrementAndGet();
-            try {
-                socket.setWantClientAuth(true);
-            } finally {
-                int i = 0;
 
-                if (!socket.isClosed()) {
-                    try {
-                        socket.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-                System.out.println("server " + curr + ": after" + i + "millisecond(s), socket is closed.");
-            }
         }
     }
 
@@ -126,6 +120,7 @@ public class SSLServerSocketTutorial {
                 Writer writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream(), StandardCharsets.UTF_8));
                 Reader reader = new BufferedReader(new InputStreamReader(socket.getInputStream(), StandardCharsets.UTF_8));
                 String clientSayHello = IOUtils.toString(reader);
+                System.out.println("client:" + clientSayHello);
                 socket.shutdownInput();
                 writer.write(sayHi);
                 writer.flush();

@@ -16,6 +16,12 @@
 	</properties>
 
 	<dependencies>
+	<!--  bouncycastle 加密Provider  -->
+		<dependency>
+			<groupId>org.bouncycastle</groupId>
+			<artifactId>bcprov-jdk15on</artifactId>
+			<version>1.56</version>
+		</dependency>
 		<!-- import sharding-jdbc core -->
 		<dependency>
 			<groupId>com.dangdang</groupId>
@@ -25,12 +31,12 @@
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
-			<version>1.7.22</version>
+			<version>1.7.25</version>
 		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-log4j12</artifactId>
-			<version>1.7.22</version>
+			<version>1.7.25</version>
 		</dependency>
 
 		<dependency>

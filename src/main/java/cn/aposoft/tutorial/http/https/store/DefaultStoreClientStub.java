@@ -1,4 +1,4 @@
-package cn.aposoft.tutorial.http.https.defaultstore;
+package cn.aposoft.tutorial.http.https.store;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;

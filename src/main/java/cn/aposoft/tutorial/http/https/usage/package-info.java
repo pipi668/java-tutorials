@@ -3,7 +3,7 @@
  */
 /**
  *  @author LiuJian
- *  @date 2017年4月4日
+ *  @date 2017年4月11日
  * 
  */
-package cn.aposoft.tutorial.http.https.dualverified;
+package cn.aposoft.tutorial.http.https.usage;

@@ -1,7 +1,7 @@
 /**
  *   Copyright  :  www.aposoft.cn
  */
-package cn.aposoft.tutorial.http.https;
+package cn.aposoft.tutorial.http.https.certs;
 
 import java.io.BufferedReader;
 import java.io.File;

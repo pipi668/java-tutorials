@@ -1,7 +1,7 @@
 /**
  *   Copyright  :  www.aposoft.cn
  */
-package cn.aposoft.tutorial.net.ssl.clientauth;
+package cn.aposoft.tutorial.net.ssl.simpleauth;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -34,13 +34,13 @@ public class SimpleSslServer {
 
         System.setProperty("javax.net.ssl.keyStore", "F:/key/aposoft.cn.jks");
         System.setProperty("javax.net.ssl.keyStorePassword", "changeit");
-        System.setProperty("javax.net.ssl.trustStore", "F:/key/aposoft.cn.jks");
-        System.setProperty("javax.net.ssl.trustStorePassword", "changeit");
+//        System.setProperty("javax.net.ssl.trustStore", "F:/key/aposoft.cn.jks");
+//        System.setProperty("javax.net.ssl.trustStorePassword", "changeit");
 
         SSLServerSocketFactory serverSocketFactory = (SSLServerSocketFactory) SSLServerSocketFactory.getDefault();
-        SSLServerSocket serverSocket = (SSLServerSocket) serverSocketFactory.createServerSocket(9100);
+        SSLServerSocket serverSocket = (SSLServerSocket) serverSocketFactory.createServerSocket(9101);
         // 要求客户端身份验证
-        serverSocket.setNeedClientAuth(true);
+        serverSocket.setNeedClientAuth(false);
 
         while (true) {
             SSLSocket socket = (SSLSocket) serverSocket.accept();

@@ -3,7 +3,7 @@
  */
 /**
  *  @author LiuJian
- *  @date 2017年4月7日
+ *  @date 2017年4月10日
  * 
  */
-package cn.aposoft.tutorial.http.https.cus;
+package cn.aposoft.tutorial.net.ssl.simpleauth;

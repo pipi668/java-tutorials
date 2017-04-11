@@ -60,7 +60,7 @@ import org.apache.http.conn.util.DomainType;
 import org.apache.http.conn.util.InetAddressUtils;
 import org.apache.http.conn.util.PublicSuffixMatcher;
 
-import cn.aposoft.tutorial.http.https.KeyStoreStub;
+import cn.aposoft.tutorial.http.https.store.KeyStoreStub;
 
 /**
  * Default {@link javax.net.ssl.HostnameVerifier} implementation.

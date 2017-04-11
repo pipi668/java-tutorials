@@ -1,7 +1,7 @@
 /**
  *   Copyright  :  www.aposoft.cn
  */
-package cn.aposoft.tutorial.http.https.dualverified;
+package cn.aposoft.tutorial.http.https.usage;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;

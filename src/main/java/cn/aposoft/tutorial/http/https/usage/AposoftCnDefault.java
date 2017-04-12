@@ -1,7 +1,7 @@
 /**
  *   Copyright  :  www.aposoft.cn
  */
-package cn.aposoft.tutorial.http.https;
+package cn.aposoft.tutorial.http.https.usage;
 
 import java.io.File;
 import java.io.IOException;
@@ -21,6 +21,8 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.ssl.SSLContexts;
 import org.apache.http.ssl.TrustStrategy;
 import org.apache.http.util.EntityUtils;
+
+import cn.aposoft.tutorial.http.https.HttpsTools;
 
 /**
  * @author LiuJian

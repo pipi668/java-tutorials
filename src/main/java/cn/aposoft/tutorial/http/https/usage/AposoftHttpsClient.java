@@ -1,7 +1,7 @@
 /**
  *   Copyright  :  www.aposoft.cn
  */
-package cn.aposoft.tutorial.http.https;
+package cn.aposoft.tutorial.http.https.usage;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;

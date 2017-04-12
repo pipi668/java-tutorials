@@ -23,7 +23,8 @@ import javax.net.ssl.SSLSocketFactory;
  */
 public class SimpleSslClient {
     public static void main(String[] args) throws Exception {
-        System.setProperty("javax.net.debug", "all,ssl,handshake");
+//     System.setProperty("javax.net.debug", "all,ssl,handshake");
+        
         System.setProperty("javax.net.ssl.keyStoreType", "PKCS12");
 //        System.setProperty("javax.net.ssl.keyStore", "f:/key/privateKey.p12");
 //        System.setProperty("javax.net.ssl.keyStorePassword", "changeit");

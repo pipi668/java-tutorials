@@ -16,6 +16,8 @@ import javax.net.ssl.HttpsURLConnection;
 import org.apache.commons.io.IOUtils;
 
 /**
+ * 因JDK本身并不信任java证书,因此使用了自定义的 jssecacerts 证书库,并导入了aposoft.cn的证书
+ * 
  * @author LiuJian
  * @date 2017年4月5日
  * 
@@ -30,7 +32,7 @@ public class UrlConnectionStub {
         Properties systemProps = System.getProperties();
         systemProps.put("javax.net.ssl.trustStore", "jssecacerts");
         systemProps.put("javax.net.ssl.trustStorePassword", "changeit");
-        URL url = new URL("https://www.aposoft.cn:8443/");
+        URL url = new URL("https://www.aposoft.cn/");
         // SSLSocketFactory sf = (SSLSocketFactory)
         // SSLSocketFactory.getDefault();
         // HttpsURLConnection.setDefaultSSLSocketFactory(sf);
@@ -38,7 +40,8 @@ public class UrlConnectionStub {
             URLConnection conn = url.openConnection();
             if (conn instanceof HttpsURLConnection) {
                 HttpsURLConnection httpsConn = (HttpsURLConnection) conn;
-
+                System.out.println("do input:" + httpsConn.getDoInput());
+                System.out.println("do output:" + httpsConn.getDoOutput());
                 httpsConn.connect();
 
                 // OutputStream output = httpsConn.getOutputStream();
@@ -47,7 +50,6 @@ public class UrlConnectionStub {
                 httpsConn.disconnect();
             }
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }

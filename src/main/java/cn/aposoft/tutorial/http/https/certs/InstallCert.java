@@ -24,7 +24,7 @@ import javax.net.ssl.TrustManagerFactory;
 import javax.net.ssl.X509TrustManager;
 
 /**
- * 从网站获取java所需的证书，调用时传入域名。
+ * 从HTTPS 握手中读取CA证书链
  * 
  * @author LiuJian
  * @date 2017年3月28日

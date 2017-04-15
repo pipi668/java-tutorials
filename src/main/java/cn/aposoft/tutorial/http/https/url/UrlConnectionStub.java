@@ -30,6 +30,8 @@ public class UrlConnectionStub {
      */
     public static void main(String[] args) throws MalformedURLException {
         Properties systemProps = System.getProperties();
+        
+        System.setProperty("javax.net.debug", "all");
         systemProps.put("javax.net.ssl.trustStore", "jssecacerts");
         systemProps.put("javax.net.ssl.trustStorePassword", "changeit");
         URL url = new URL("https://www.aposoft.cn/");

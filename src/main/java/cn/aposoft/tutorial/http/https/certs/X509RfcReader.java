@@ -17,6 +17,8 @@ import java.security.cert.X509Certificate;
 import org.apache.commons.codec.binary.Base64;
 
 /**
+ * 
+ * 
  * @author LiuJian
  * @date 2017年4月4日
  * 
@@ -24,6 +26,7 @@ import org.apache.commons.codec.binary.Base64;
 public class X509RfcReader {
 
     /**
+     * 
      * @param args
      * @throws CertificateException
      * @throws SignatureException
@@ -31,6 +34,9 @@ public class X509RfcReader {
      * @throws NoSuchAlgorithmException
      * @throws InvalidKeyException
      * @throws IOException
+     * 
+     * @see cn.aposoft.tutorial.security.bc.CertificateFactoryStub
+     *      使用BouncyCastle的CertificateFactory可以直接读取RFC格式证书
      */
     public static void main(String[] args)
             throws CertificateException, InvalidKeyException, NoSuchAlgorithmException, NoSuchProviderException, SignatureException, IOException {

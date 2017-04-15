@@ -14,6 +14,8 @@ import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
 
 /**
+ * X509证书读取
+ * 针对DER格式编码的读取功能
  * @author LiuJian
  * @date 2017年4月4日
  * 

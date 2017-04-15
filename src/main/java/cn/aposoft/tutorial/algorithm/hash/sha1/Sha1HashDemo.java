@@ -4,6 +4,7 @@
 package cn.aposoft.tutorial.algorithm.hash.sha1;
 
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 
 import org.apache.commons.codec.digest.DigestUtils;
 
@@ -19,7 +20,6 @@ public class Sha1HashDemo {
      */
     public static void main(String[] args) {
         final String orgin = "originstring";
-        System.out.println(DigestUtils.sha1Hex(orgin.getBytes(Charset.forName("UTF-8"))));
+        System.out.println(DigestUtils.sha1Hex(orgin.getBytes(StandardCharsets.US_ASCII)));
     }
-
 }

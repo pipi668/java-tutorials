@@ -22,6 +22,8 @@ import java.util.Enumeration;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSocket;
+import javax.net.ssl.SSLSocketFactory;
 
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -60,14 +62,27 @@ public class AposoftHttpsClient {
             sslContext = SSLContexts.custom()//
                     // .loadTrustMaterial(truststore, trustAposoft)//
                     .loadTrustMaterial(truststore, null) //
+
                     .build();
         } catch (KeyManagementException e1) {
             e1.printStackTrace();
             throw e1;
         }
+        String[] allProtocols = null;
+        String[] supportedCipherSuites = null;
+        SSLSocketFactory socketFactory = (SSLSocketFactory) sslContext.getSocketFactory();
+        try (SSLSocket sslSocket = (SSLSocket) socketFactory.createSocket();) {
+            allProtocols = sslSocket.getSupportedProtocols();
+            supportedCipherSuites = socketFactory.getSupportedCipherSuites();
+        }
         // cn.aposoft.tutorial.http.https.verifier
         HostnameVerifier hostNameVerifier = new DefaultHostnameVerifier();
-        SSLConnectionSocketFactory sslFactory = new SSLConnectionSocketFactory(sslContext, hostNameVerifier);
+        SSLConnectionSocketFactory sslFactory;
+        if (allProtocols == null || supportedCipherSuites == null) {
+            sslFactory = new SSLConnectionSocketFactory(sslContext, hostNameVerifier);
+        } else {
+            sslFactory = new SSLConnectionSocketFactory(sslContext, allProtocols, supportedCipherSuites, hostNameVerifier);
+        }
         // SSLConnectionSocketFactory sslFactory = new
         // SSLConnectionSocketFactory(sslContext);
 

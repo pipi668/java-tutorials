@@ -345,7 +345,7 @@ public class SSLConnectionSocketFactory implements LayeredConnectionSocketFactor
 
             // final String[] allProtocols = sslsock.getEnabledProtocols();
             final String[] allProtocols = sslsock.getSupportedProtocols();
-
+            
             final List<String> enabledProtocols = new ArrayList<String>(allProtocols.length);
             for (final String protocol : allProtocols) {
                 if (!protocol.startsWith("SSL")) {

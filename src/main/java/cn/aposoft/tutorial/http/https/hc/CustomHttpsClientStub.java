@@ -30,7 +30,7 @@ public class CustomHttpsClientStub {
 
     public static void main(String[] args) {
         final String gomefinanceUrl = "https://www.gomefinance.com.cn/";
-
+        System.setProperty("javax.net.debug", "ssl,handshake");
 
         SSLConnectionSocketFactory socketFacotry = SSLConnectionSocketFactory.getSocketFactory();
 
@@ -48,7 +48,7 @@ public class CustomHttpsClientStub {
             try (CloseableHttpResponse response = client.execute(httpGet);) {
 
                 HttpEntity entity = response.getEntity();
-          
+
                 String responseText = EntityUtils.toString(entity, StandardCharsets.UTF_8);
                 System.out.println();
                 System.out.println(responseText);

@@ -34,7 +34,7 @@ public class DefaultStoreClientStub {
     public static void main(String[] args)
             throws IOException, KeyManagementException, NoSuchAlgorithmException, KeyStoreException, CertificateException, UnrecoverableKeyException {
         Properties systemProps = System.getProperties();
-        systemProps.put("javax.net.ssl.trustStore", "jssecacerts");
+        systemProps.put("javax.net.ssl.trustStore", "StartComRoot1.jks");
         systemProps.put("javax.net.ssl.trustStorePassword", "changeit");
 
         try (CloseableHttpClient client = HttpClients.custom().build();) {

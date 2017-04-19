@@ -20,7 +20,7 @@ import org.apache.http.util.EntityUtils;
 public class NormalLoopStub {
     /**
      * 7761 ms for 10000 times
-     *
+     * elapse:9126
      * 
      * @param args
      * @throws ClientProtocolException

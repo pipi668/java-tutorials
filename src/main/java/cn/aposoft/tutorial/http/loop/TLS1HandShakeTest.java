@@ -27,13 +27,13 @@ import org.apache.http.util.EntityUtils;
  * @date 2017年4月18日
  * 
  */
-public class TLS12HandShakeTest {
+public class TLS1HandShakeTest {
 
     /**
-     * elapse:11883
-     * elapse:16492 for 10000 times
+     * elapse:37090 for 10000 times for TLS1 connection close elapse:16492 for
+     * 10000 times for TLS1 elapse:13669
      * 
-     * elapse:38414 for 10000 ConnectionClose
+     * 
      * @param args
      * @throws IOException
      * @throws ClientProtocolException
@@ -44,14 +44,16 @@ public class TLS12HandShakeTest {
      */
     public static void main(String[] args)
             throws ClientProtocolException, IOException, KeyManagementException, NoSuchAlgorithmException, KeyStoreException, CertificateException {
-//        System.setProperty("javax.net.debug", "ssl,handshake");
+        // System.setProperty("javax.net.debug", "ssl,handshake");
         System.setProperty("javax.net.ssl.trustStore", "StartComRoot1.jks");
         System.setProperty("javax.net.ssl.trustStorePassword", "changeit");
         HttpGet get = new HttpGet("https://www.aposoft.cn:8443/");
         // HttpGet get = new HttpGet("https://www.gomemyf.com/");
-//        get.addHeader("Connection", "close");
+        get.addHeader("Connection", "close");
         SSLContext sslContext = SSLContexts.createDefault();
-        final String[] enabledProtocols = new String[] { "TLSv1", "TLSv1.1", "TLSv1.2" };
+        final String[] enabledProtocols = new String[] { "TLSv1" };// ,
+                                                                   // "TLSv1.1",
+                                                                   // "TLSv1.2"
         final String[] supportedCipherSuites = new String[] { "TLS_RSA_WITH_AES_256_CBC_SHA" };
         // cn.aposoft.tutorial.http.https.verifier
         HostnameVerifier hostNameVerifier = new DefaultHostnameVerifier();
@@ -64,8 +66,7 @@ public class TLS12HandShakeTest {
             long begin = System.currentTimeMillis();
 
             for (int i = 0; i < 10000; i++) {
-                CloseableHttpResponse resp = client.execute(get);
-                {
+                try (CloseableHttpResponse resp = client.execute(get);) {
                     // System.out.println(EntityUtils.toString(resp.getEntity()));
                     EntityUtils.consumeQuietly(resp.getEntity());
 

@@ -24,35 +24,32 @@ import org.apache.http.util.EntityUtils;
 
 /**
  * @author LiuJian
- * @date 2017年4月18日
+ * @date 2017年4月19日
  * 
  */
-public class TLS12HandShakeTest {
+public class SSL3CloseConnectionStub {
 
     /**
-     * elapse:11883
-     * elapse:16492 for 10000 times
+     * elapse:299200 for TLSv1 Close_Connection elapse:283293
      * 
-     * elapse:38414 for 10000 ConnectionClose
+     * when server open session cache elapse:37660
+     * 
      * @param args
-     * @throws IOException
-     * @throws ClientProtocolException
-     * @throws CertificateException
-     * @throws KeyStoreException
-     * @throws NoSuchAlgorithmException
-     * @throws KeyManagementException
      */
     public static void main(String[] args)
             throws ClientProtocolException, IOException, KeyManagementException, NoSuchAlgorithmException, KeyStoreException, CertificateException {
+        System.out.println(System.getProperty("java.home"));
 //        System.setProperty("javax.net.debug", "ssl,handshake");
         System.setProperty("javax.net.ssl.trustStore", "StartComRoot1.jks");
         System.setProperty("javax.net.ssl.trustStorePassword", "changeit");
         HttpGet get = new HttpGet("https://www.aposoft.cn:8443/");
         // HttpGet get = new HttpGet("https://www.gomemyf.com/");
-//        get.addHeader("Connection", "close");
+        get.addHeader("Connection", "close");
         SSLContext sslContext = SSLContexts.createDefault();
-        final String[] enabledProtocols = new String[] { "TLSv1", "TLSv1.1", "TLSv1.2" };
-        final String[] supportedCipherSuites = new String[] { "TLS_RSA_WITH_AES_256_CBC_SHA" };
+        final String[] enabledProtocols = new String[] { "SSLv3" };
+        final String[] supportedCipherSuites = null;// new String[] {
+                                                    // "TLS_RSA_WITH_AES_256_CBC_SHA"
+                                                    // };
         // cn.aposoft.tutorial.http.https.verifier
         HostnameVerifier hostNameVerifier = new DefaultHostnameVerifier();
         SSLConnectionSocketFactory sslSocketFactory = new SSLConnectionSocketFactory(sslContext, enabledProtocols, supportedCipherSuites,

@@ -48,7 +48,7 @@ public class SelfsignHttpClient {
             throws IOException, KeyManagementException, NoSuchAlgorithmException, KeyStoreException, CertificateException {
         SSLContext sslContext = HttpsTools.createSSLContext();
         try (CloseableHttpClient client = HttpClients.custom().setSSLContext(sslContext).build();) {
-            final String aposoft_url = "https://aposoft.cn:8443/wx/index.jsp";
+            final String aposoft_url = "https://www.aposoft.cn:8443/";
             HttpGet get = new HttpGet(aposoft_url);
             // 执行远程请求,并输出结果
             try (CloseableHttpResponse resp = client.execute(get);) {

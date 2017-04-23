@@ -30,7 +30,10 @@ import org.apache.http.util.EntityUtils;
 public class SSL3CloseConnectionStub {
 
     /**
-     * elapse:299200 for TLSv1 Close_Connection elapse:283293
+     * 需要注释如下内容: jdk.tls.disabledAlgorithms=SSLv3
+     * <p>
+     * 文件位置: JRE_HOME/lib/security/java.security elapse:299200 for TLSv1
+     * <p>
      * 
      * when server open session cache elapse:37660
      * 
@@ -39,7 +42,7 @@ public class SSL3CloseConnectionStub {
     public static void main(String[] args)
             throws ClientProtocolException, IOException, KeyManagementException, NoSuchAlgorithmException, KeyStoreException, CertificateException {
         System.out.println(System.getProperty("java.home"));
-//        System.setProperty("javax.net.debug", "ssl,handshake");
+        // System.setProperty("javax.net.debug", "ssl,handshake");
         System.setProperty("javax.net.ssl.trustStore", "StartComRoot1.jks");
         System.setProperty("javax.net.ssl.trustStorePassword", "changeit");
         HttpGet get = new HttpGet("https://www.aposoft.cn:8443/");

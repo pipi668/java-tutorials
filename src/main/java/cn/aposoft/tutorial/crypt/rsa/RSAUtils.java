@@ -79,7 +79,7 @@ public class RSAUtils {
     // public static final String SIGNATURE_ALGORITHM = "MD5withRSA";
     public static final String SIGNATURE_ALGORITHM = "SHA256withRSA";
     /**
-     * RSA最大加密明文大小
+     * RSA最大加密明文大小, DEFAULT TO PKCS#1 PADDING
      */
     private static final int MAX_ENCRYPT_BLOCK = 117;
 
@@ -498,6 +498,7 @@ public class RSAUtils {
         Key privateK = keyFactory.generatePrivate(pkcs8KeySpec);
         Cipher cipher = createCipher();
         cipher.init(Cipher.ENCRYPT_MODE, privateK);
+
         int inputLen = data.length;
         try (ByteArrayOutputStream out = new ByteArrayOutputStream();) {
             int offSet = 0;

@@ -30,15 +30,17 @@ public class SimpleSslServer {
      * @param args
      */
     public static void main(String[] args) throws Exception {
-        System.setProperty("javax.net.debug", "all,ssl,handshake");
-
+        // System.setProperty("javax.net.debug", "all,ssl,handshake");
+        System.setProperty("javax.net.debug", "ssl,handshake");
         System.setProperty("javax.net.ssl.keyStore", "F:/key/aposoft.cn.jks");
         System.setProperty("javax.net.ssl.keyStorePassword", "changeit");
         System.setProperty("javax.net.ssl.trustStore", "F:/key/aposoft.cn.jks");
         System.setProperty("javax.net.ssl.trustStorePassword", "changeit");
 
         SSLServerSocketFactory serverSocketFactory = (SSLServerSocketFactory) SSLServerSocketFactory.getDefault();
+
         SSLServerSocket serverSocket = (SSLServerSocket) serverSocketFactory.createServerSocket(9100);
+        serverSocket.setEnabledProtocols(new String[] { "TLSv1", "TLSv1.1", "TLSv1.2" });
         // 要求客户端身份验证
         serverSocket.setNeedClientAuth(true);
 

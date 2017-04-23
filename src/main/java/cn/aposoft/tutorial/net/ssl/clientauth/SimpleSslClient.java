@@ -23,7 +23,8 @@ import javax.net.ssl.SSLSocketFactory;
  */
 public class SimpleSslClient {
     public static void main(String[] args) throws Exception {
-        System.setProperty("javax.net.debug", "all,ssl,handshake");
+        // System.setProperty("javax.net.debug", "all,ssl,handshake");
+        System.setProperty("javax.net.debug", "ssl,handshake");
         System.setProperty("javax.net.ssl.keyStoreType", "PKCS12");
         System.setProperty("javax.net.ssl.keyStore", "f:/key/privateKey.p12");
         System.setProperty("javax.net.ssl.keyStorePassword", "changeit");
@@ -34,7 +35,7 @@ public class SimpleSslClient {
 
         try (SSLSocket sslsocket = (SSLSocket) sslsocketfactory.createSocket("127.0.0.1", 9100);) {
             // sslsocket.setSoTimeout(500);
-
+            sslsocket.setEnabledProtocols(new String[] { "TLSv1.2" });
             try (OutputStream outputStream = sslsocket.getOutputStream(); //
                     InputStream inputStream = sslsocket.getInputStream();) {
                 try (BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream, StandardCharsets.UTF_8));

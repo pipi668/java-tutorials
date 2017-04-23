@@ -5,6 +5,7 @@ package cn.aposoft.tutorial.crypt.rsa;
 
 import java.math.BigInteger;
 import java.security.InvalidKeyException;
+import java.security.Key;
 import java.security.KeyPair;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
@@ -12,9 +13,9 @@ import java.security.SignatureException;
 import java.security.interfaces.RSAPrivateCrtKey;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.RSAKeyGenParameterSpec;
-import java.util.Arrays;
 
 import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 
@@ -27,7 +28,7 @@ import sun.security.rsa.RSAPublicKeyImpl;
  *
  */
 @SuppressWarnings("restriction")
-public class RSA2048Tester {
+public class RSA2048SelfTester {
     private String publicKey;
     private String privateKey;
 
@@ -37,11 +38,8 @@ public class RSA2048Tester {
     public static void main(String[] args) {
         int keyLength = 2048;
         // createKeyPair();
-        new RSA2048Tester().generateKeyPair();
-        //
-        if (true)
-            return;
-        RSA2048Tester tester = new RSA2048Tester();
+        // new RSA2048Tester().generateKeyPair()
+        RSA2048SelfTester tester = new RSA2048SelfTester();
         KeyPairEntry entry = tester.createKeyPair(keyLength);
         long beginPublic = System.currentTimeMillis();
         for (int i = 0; i < 100; i++) {
@@ -178,18 +176,29 @@ public class RSA2048Tester {
             byte[] original = createByteArray(blockSize);
             try {
                 // System.out.println("original length:" + blockSize);
-                byte[] encoded = RSAUtils.encryptByPublicKey(original, keyPair.getEncodedPublicKey(), blockSize);
+                byte[] encoded = doEncrypt(original, keyPair.getPublicKey());
                 // byte[] decoded = RSAUtils.decryptByPrivateKey(encoded,
                 // keyPair.getEncodedPrivateKey(), encoded.length);
                 // System.out.println("encoded:" + encoded.length);
                 // System.out.println(Arrays.equals(original, decoded));
-            } catch (InvalidKeyException | NoSuchAlgorithmException | InvalidKeySpecException | NoSuchPaddingException | IllegalBlockSizeException
-                    | BadPaddingException e) {
+            } catch (InvalidKeyException | NoSuchAlgorithmException | NoSuchPaddingException | IllegalBlockSizeException | BadPaddingException e) {
                 e.printStackTrace();
                 System.out.println("break.");
                 break;
             }
         }
+    }
+
+    public byte[] doEncrypt(final byte[] original, final Key key)
+            throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
+        Cipher cipher = createCipher();
+        cipher.init(Cipher.ENCRYPT_MODE, key);
+        cipher.update(original);
+        return cipher.doFinal();
+    }
+
+    public Cipher createCipher() throws NoSuchAlgorithmException, NoSuchPaddingException {
+        return Cipher.getInstance("RSA");
     }
 
     public KeyPair generateKeyPair() {
@@ -198,13 +207,7 @@ public class RSA2048Tester {
         int j = this.keySize - i;
         System.out.println("i:" + i + ",j:" + j);
         if (this.random == null) {
-            try {
-                this.random = SecureRandom.getInstance("SHA1PRNG");
-            } catch (NoSuchAlgorithmException e1) {
-                e1.printStackTrace();
-            }
-            if (this.random == null)
-                this.random = JCAUtil.getSecureRandom();
+            this.random = JCAUtil.getSecureRandom();
         }
 
         BigInteger e = this.publicExponent;
@@ -218,7 +221,7 @@ public class RSA2048Tester {
         BigInteger n;
         // q-1
         BigInteger q_1;
-        // (p-1)*(q-1)
+        // (p_1)*(q-1)
         BigInteger p_1mq_1;
 
         do {
@@ -226,7 +229,7 @@ public class RSA2048Tester {
             do {
                 q = BigInteger.probablePrime(j, this.random);
                 // swap p and q
-                if (p.compareTo(q) < 0) {
+                if (((BigInteger) p).compareTo((BigInteger) q) < 0) {
                     BigInteger t = p;
                     p = q;
                     q = t;
@@ -242,29 +245,25 @@ public class RSA2048Tester {
             p_1mq_1 = p_1.multiply(q_1);
         }
         // 要求 e 和(p_1)*(q-1) 互质
-        // 最大公约数为1 greatest common divisor
         while (!(e.gcd(p_1mq_1).equals(BigInteger.ONE)));
         System.out.println("n:" + n);
         System.out.println("p:" + p);
         System.out.println("q:" + q);
         System.out.println("(p-1)*(q-1):" + p_1mq_1);
         // (d*e)mod((p-1)*(q-1))=1
-        // mod inverse means : (d*e) mod ((p-1)*(q-1)) = 1
         BigInteger d = e.modInverse(p_1mq_1);
-
-        System.out.println(" (d * e) mod ((p-1) * (q-1)) = 1 \r\nd:" + d);
+        System.out.println(" (d*e)mod((p-1)*(q-1))=1 d:" + d);
         BigInteger pe = d.mod(p_1);
         System.out.println("pe:" + pe);
         BigInteger qe = d.mod(q_1);
         System.out.println("qe:" + qe);
 
-        // : coeff =
         BigInteger coeff = q.modInverse(p);
-        System.out.println(" ( q * coeff ) mod p =1 , \r\ncoeff:" + coeff);
+        System.out.println("coeff:" + coeff);
         try {
             RSAPublicKeyImpl localRSAPublicKeyImpl = new RSAPublicKeyImpl(n, e);
             RSAPrivateCrtKeyImpl localRSAPrivateCrtKeyImpl = new RSAPrivateCrtKeyImpl//
-            (n, e, d, p, q, pe, qe, coeff);
+            (n, e, d, (BigInteger) p, (BigInteger) q, pe, qe, coeff);
 
             return new KeyPair(localRSAPublicKeyImpl, localRSAPrivateCrtKeyImpl);
         } catch (InvalidKeyException localInvalidKeyException) {

@@ -33,6 +33,17 @@ public class SimpleSslClient {
         System.setProperty("javax.net.ssl.trustStore", "f:/key/trust-client.jks");
         System.setProperty("javax.net.ssl.trustStorePassword", "changeit");
 
+        // Secure Renegotiation in all modes
+        
+        // sun.security.ssl.allowUnsafeRenegotiation Introduced in Phase 1, this
+        // controls whether legacy (unsafe) renegotiations are permitted.
+        // sun.security.ssl.allowLegacyHelloMessages Introduced in Phase 2, this
+        // allows the peer to handshake without requiring the proper RFC 5746
+        // messages.
+        // Strict Mode
+        System.setProperty("sun.security.ssl.allowUnsafeRenegotiation", "false");
+        System.setProperty("sun.security.ssl.allowLegacyHelloMessages", "false");
+
         final String host = "aposoft.cn";
         final int port = 9101;
 

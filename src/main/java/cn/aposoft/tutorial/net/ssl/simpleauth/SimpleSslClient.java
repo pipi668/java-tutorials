@@ -50,10 +50,26 @@ import javax.net.ssl.SSLSocket;
  */
 public class SimpleSslClient {
     public static void main(String[] args) throws Exception {
-        System.setProperty("javax.net.debug", "ssl,handshake,verbose");/* all, */
+        System.setProperty("javax.net.debug", "ssl,handshake");/* all, */
 
         System.setProperty("javax.net.ssl.trustStore", "f:/key/trust-client.jks");
         System.setProperty("javax.net.ssl.trustStorePassword", "changeit");
+
+        //
+        // Strict: If clients do not send the proper RFC 5746 messages, initial
+        // connections will immediately be terminated by the server
+        // (SSLHandshakeException/handshake_failure).
+        //
+        // Interoperable: Initial connections from legacy clients allowed
+        // (missing RFC 5746 messages), but renegotiations will not be allowed
+        // by the server. [2][3]
+        //
+        // Insecure: Connections and renegotiations with legacy clients are
+        // allowed, but are vulnerable to the original MITM attack.
+
+        // Strict Mode
+        System.setProperty("sun.security.ssl.allowUnsafeRenegotiation", "false");
+        System.setProperty("sun.security.ssl.allowLegacyHelloMessages", "false");
 
         final String host = "aposoft.cn";
         final InetAddress inetAddress = InetAddress.getByName(host);
@@ -74,6 +90,11 @@ public class SimpleSslClient {
             // identificationAlgorithm EndpointIdentificationAlgorithm
             // HTTPS , LDAPS
             paramSSLParameters.setEndpointIdentificationAlgorithm("HTTPS");
+
+            sslsocket.startHandshake();
+            //
+            System.out.println("****Secure Renegotiation****");
+            sslsocket.startHandshake();
 
             try (OutputStream outputStream = sslsocket.getOutputStream(); //
                     InputStream inputStream = sslsocket.getInputStream();) {

@@ -13,6 +13,7 @@ import java.io.OutputStreamWriter;
 import java.net.InetAddress;
 import java.nio.charset.StandardCharsets;
 
+import javax.net.ssl.SSLParameters;
 import javax.net.ssl.SSLServerSocket;
 import javax.net.ssl.SSLServerSocketFactory;
 import javax.net.ssl.SSLSocket;
@@ -37,19 +38,29 @@ public class SimpleSslServer {
         System.setProperty("javax.net.ssl.keyStorePassword", "changeit");
         System.setProperty("javax.net.ssl.trustStore", "F:/key/aposoft.cn.jks");
         System.setProperty("javax.net.ssl.trustStorePassword", "changeit");
+        
+        // Strict Mode
+        System.setProperty("sun.security.ssl.allowUnsafeRenegotiation", "false");
+        System.setProperty("sun.security.ssl.allowLegacyHelloMessages", "false");
+        
+        
         final String host = "aposoft.cn";
         final InetAddress inetAddress = InetAddress.getByName(host);
         final int port = 9101;
-        SSLServerSocket serverSocket = (SSLServerSocket) SSLServerSocketFactory.getDefault().createServerSocket(port, 0, inetAddress);
+        try (SSLServerSocket serverSocket = (SSLServerSocket) SSLServerSocketFactory.getDefault().createServerSocket(port, 0, inetAddress);) {
+            serverSocket.setEnabledProtocols(new String[] { "TLSv1", "TLSv1.1", "TLSv1.2" });
+            // 要求客户端身份验证
+            serverSocket.setNeedClientAuth(true);
+            SSLParameters paramSSLParameters = serverSocket.getSSLParameters();
+            // identificationAlgorithm EndpointIdentificationAlgorithm
+            // HTTPS , LDAPS
+            paramSSLParameters.setEndpointIdentificationAlgorithm("HTTPS");
 
-        serverSocket.setEnabledProtocols(new String[] { "TLSv1", "TLSv1.1", "TLSv1.2" });
-        // 要求客户端身份验证
-        serverSocket.setNeedClientAuth(true);
-
-        while (true) {
-            SSLSocket socket = (SSLSocket) serverSocket.accept();
-            Accepter accepter = new Accepter(socket);
-            accepter.service();
+            while (true) {
+                SSLSocket socket = (SSLSocket) serverSocket.accept();
+                Accepter accepter = new Accepter(socket);
+                accepter.service();
+            }
         }
     }
 

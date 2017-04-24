@@ -37,15 +37,22 @@ public class SimpleSslServer {
         System.setProperty("javax.net.ssl.keyStore", "F:/key/aposoft.cn.jks");
         System.setProperty("javax.net.ssl.keyStorePassword", "changeit");
 
+        // Strict Mode
+        System.setProperty("sun.security.ssl.allowUnsafeRenegotiation", "false");
+        System.setProperty("sun.security.ssl.allowLegacyHelloMessages", "false");
+        
+        
         final String host = "aposoft.cn";
         final InetAddress inetAddress = InetAddress.getByName(host);
         final int port = 9101;
 
         try (SSLServerSocket serverSocket = (SSLServerSocket) SSLServerSocketFactory.getDefault().createServerSocket(port, 0, inetAddress);) {
+            serverSocket.setEnabledProtocols(new String[] { "TLSv1", "TLSv1.1", "TLSv1.2" });
             SSLParameters paramSSLParameters = serverSocket.getSSLParameters();
             paramSSLParameters.setEndpointIdentificationAlgorithm("HTTPS");
+          
             // 期望客户端验证
-            serverSocket.setWantClientAuth(true);
+//            serverSocket.setWantClientAuth(true);
             while (true) {
                 SSLSocket socket = (SSLSocket) serverSocket.accept();
                 Accepter accepter = new Accepter(socket);

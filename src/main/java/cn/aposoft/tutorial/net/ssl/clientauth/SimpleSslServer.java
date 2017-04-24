@@ -10,6 +10,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.net.InetAddress;
 import java.nio.charset.StandardCharsets;
 
 import javax.net.ssl.SSLServerSocket;
@@ -36,10 +37,11 @@ public class SimpleSslServer {
         System.setProperty("javax.net.ssl.keyStorePassword", "changeit");
         System.setProperty("javax.net.ssl.trustStore", "F:/key/aposoft.cn.jks");
         System.setProperty("javax.net.ssl.trustStorePassword", "changeit");
+        final String host = "aposoft.cn";
+        final InetAddress inetAddress = InetAddress.getByName(host);
+        final int port = 9101;
+        SSLServerSocket serverSocket = (SSLServerSocket) SSLServerSocketFactory.getDefault().createServerSocket(port, 0, inetAddress);
 
-        SSLServerSocketFactory serverSocketFactory = (SSLServerSocketFactory) SSLServerSocketFactory.getDefault();
-
-        SSLServerSocket serverSocket = (SSLServerSocket) serverSocketFactory.createServerSocket(9100);
         serverSocket.setEnabledProtocols(new String[] { "TLSv1", "TLSv1.1", "TLSv1.2" });
         // 要求客户端身份验证
         serverSocket.setNeedClientAuth(true);

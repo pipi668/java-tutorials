@@ -10,9 +10,11 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Reader;
+import java.net.InetAddress;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.TimeUnit;
 
+import javax.net.ssl.SSLParameters;
 import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
 
@@ -31,11 +33,15 @@ public class SimpleSslClient {
         System.setProperty("javax.net.ssl.trustStore", "f:/key/trust-client.jks");
         System.setProperty("javax.net.ssl.trustStorePassword", "changeit");
 
-        SSLSocketFactory sslsocketfactory = (SSLSocketFactory) SSLSocketFactory.getDefault();
+        final String host = "aposoft.cn";
+        final int port = 9101;
 
-        try (SSLSocket sslsocket = (SSLSocket) sslsocketfactory.createSocket("127.0.0.1", 9100);) {
-            // sslsocket.setSoTimeout(500);
-            sslsocket.setEnabledProtocols(new String[] { "TLSv1.2" });
+        try (SSLSocket sslsocket = (SSLSocket) SSLSocketFactory.getDefault().createSocket(host, port);) {
+
+            sslsocket.setEnabledProtocols(new String[] { "TLSv1", "TLSv1.1", "TLSv1.2" });
+            SSLParameters paramSSLParameters = sslsocket.getSSLParameters();
+            paramSSLParameters.setEndpointIdentificationAlgorithm("HTTPS");
+
             try (OutputStream outputStream = sslsocket.getOutputStream(); //
                     InputStream inputStream = sslsocket.getInputStream();) {
                 try (BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream, StandardCharsets.UTF_8));

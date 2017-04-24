@@ -38,12 +38,13 @@ public class SSLSocketTutorial {
      * @param args
      */
     public static void main(String[] args) {
+        System.setProperty("javax.net.debug", "all,ssl,handshake");
         SocketFactory factory = SSLSocketFactory.getDefault();
         if (factory instanceof SSLSocketFactory) {
             SSLSocketFactory sslFactory = (SSLSocketFactory) factory;
             try (SSLSocket socket = (SSLSocket) sslFactory.createSocket();) {
                 System.out.println("EnabledCipherSuites:" + Arrays.toString(socket.getEnabledCipherSuites()));
-
+                socket.setEnabledProtocols(new String[] { "TLSv1.2" });
                 socket.setUseClientMode(true);
                 socket.connect(REMOTE_SOCKET_ADDRESS);
                 socket.startHandshake();

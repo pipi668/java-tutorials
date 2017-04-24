@@ -11,17 +11,13 @@ import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSocket;
-import javax.net.ssl.SSLSocketFactory;
 
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
+import cn.aposoft.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.ssl.SSLContexts;
@@ -39,7 +35,7 @@ public class AposoftCnDefault {
     public static void main(String[] args)
             throws IOException, KeyManagementException, NoSuchAlgorithmException, KeyStoreException, CertificateException {
 
-        System.setProperty("javax.net.debug", "ssl");
+        System.setProperty("javax.net.debug", "all,ssl");
         TrustStrategy trustStrategy = new TrustStrategy() {
             @Override
             public boolean isTrusted(X509Certificate[] chain, String authType) throws CertificateException {
@@ -54,38 +50,23 @@ public class AposoftCnDefault {
         sslContext = SSLContexts.custom()//
                 // .loadTrustMaterial(new File("jssecacerts"),
                 // "changeit".toCharArray(), null)//
-                .loadTrustMaterial(new File("jssecacerts"), "changeit".toCharArray(), trustStrategy) //
+                .loadTrustMaterial(new File("StartComRoot1.jks"), "changeit".toCharArray(), trustStrategy) //
                 .build();
         String[] allProtocols = null;
-        String[] supportedCipherSuites = null;
-        SSLSocketFactory sslFactory = (SSLSocketFactory) sslContext.getSocketFactory();
-        List<String> enabledProtocols = new ArrayList<>();
-        try (SSLSocket sslSocket = (SSLSocket) sslFactory.createSocket();) {
-            allProtocols = sslSocket.getSupportedProtocols();
-            supportedCipherSuites = sslFactory.getSupportedCipherSuites();
+        String[] supportedCipherSuites = null; // 设为null 取默认值
 
-            for (final String protocol : allProtocols) {
-                if (!protocol.startsWith("SSL")) {
-                    enabledProtocols.add(protocol);
-                }
-            }
-            System.out.println("ENABLED+PROTOCOLS:" + enabledProtocols);
-        }
+        String[] enabledProtocols = new String[] { "TLSv1", "TLSv1.1", "TLSv1.2" };
+
         // cn.aposoft.tutorial.http.https.verifier
         HostnameVerifier hostNameVerifier = new DefaultHostnameVerifier();
         SSLConnectionSocketFactory sslSocketFactory;
-        if (allProtocols == null || supportedCipherSuites == null) {
-            sslSocketFactory = new SSLConnectionSocketFactory(sslContext, hostNameVerifier);
-        } else {
-            sslSocketFactory = new SSLConnectionSocketFactory(sslContext, enabledProtocols.toArray(new String[enabledProtocols.size()]),
-                    supportedCipherSuites, hostNameVerifier);
-        }
+
+        sslSocketFactory = new SSLConnectionSocketFactory(sslContext, enabledProtocols, supportedCipherSuites, hostNameVerifier);
+
         try (CloseableHttpClient client = HttpClients.custom()//
                 .setSSLContext(sslContext) //
-                .setSSLSocketFactory(sslSocketFactory)
-
-                .build()) {
-            HttpGet httpGet = new HttpGet("https://www.aposoft.cn:8443/");
+                .setSSLSocketFactory(sslSocketFactory).build()) {
+            HttpGet httpGet = new HttpGet("https://www.aposoft.cn/");
             // HttpGet httpGet = new HttpGet("https://www.startssl.com/");
             try (CloseableHttpResponse resp = client.execute(httpGet)) {
                 String respText = EntityUtils.toString(resp.getEntity(), StandardCharsets.UTF_8);

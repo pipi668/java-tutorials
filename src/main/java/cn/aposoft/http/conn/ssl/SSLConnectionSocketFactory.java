@@ -287,11 +287,11 @@ public class SSLConnectionSocketFactory implements LayeredConnectionSocketFactor
      *             may be thrown if overridden
      */
     protected void prepareSocket(final SSLSocket socket) throws IOException {
+
     }
 
     @Override
     public Socket createSocket(final HttpContext context) throws IOException {
-        log.debug("Create default plain socket");
         return SocketFactory.getDefault().createSocket();
     }
 
@@ -345,7 +345,7 @@ public class SSLConnectionSocketFactory implements LayeredConnectionSocketFactor
 
             // final String[] allProtocols = sslsock.getEnabledProtocols();
             final String[] allProtocols = sslsock.getSupportedProtocols();
-            
+
             final List<String> enabledProtocols = new ArrayList<String>(allProtocols.length);
             for (final String protocol : allProtocols) {
                 if (!protocol.startsWith("SSL")) {
@@ -366,7 +366,6 @@ public class SSLConnectionSocketFactory implements LayeredConnectionSocketFactor
         }
 
         prepareSocket(sslsock);
-        this.log.debug("Starting handshake");
         sslsock.startHandshake();
         // System.in.read();
         verifyHostname(sslsock, target);

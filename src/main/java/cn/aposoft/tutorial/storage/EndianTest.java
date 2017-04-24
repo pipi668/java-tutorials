@@ -15,6 +15,7 @@ import sun.misc.Unsafe;
 public class EndianTest {
 
     // 使用方法
+    @SuppressWarnings("restriction")
     private static Unsafe getUnsafeInstance() throws SecurityException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
         Field theUnsafeInstance = Unsafe.class.getDeclaredField("theUnsafe");
         theUnsafeInstance.setAccessible(true);

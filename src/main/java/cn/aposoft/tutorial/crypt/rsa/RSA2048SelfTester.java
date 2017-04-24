@@ -34,8 +34,14 @@ public class RSA2048SelfTester {
 
     /**
      * @param args
+     * @throws BadPaddingException
+     * @throws IllegalBlockSizeException
+     * @throws NoSuchPaddingException
+     * @throws NoSuchAlgorithmException
+     * @throws InvalidKeyException
      */
-    public static void main(String[] args) {
+    public static void main(String[] args)
+            throws InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException {
         int keyLength = 2048;
         // createKeyPair();
         // new RSA2048Tester().generateKeyPair()
@@ -53,23 +59,23 @@ public class RSA2048SelfTester {
         }
         long endPrivate = System.currentTimeMillis();
         System.out.println("private:" + (endPrivate - beginPrivate));
-        try {
-            tester.testsign(entry, keyLength);
-        } catch (InvalidKeyException e) {
-            e.printStackTrace();
-        } catch (InvalidKeySpecException e) {
-            e.printStackTrace();
-        } catch (IllegalBlockSizeException e) {
-            e.printStackTrace();
-        } catch (BadPaddingException e) {
-            e.printStackTrace();
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (NoSuchPaddingException e) {
-            e.printStackTrace();
-        } catch (SignatureException e) {
-            e.printStackTrace();
-        }
+        // try {
+        // tester.testsign(entry, keyLength);
+        // } catch (InvalidKeyException e) {
+        // e.printStackTrace();
+        // } catch (InvalidKeySpecException e) {
+        // e.printStackTrace();
+        // } catch (IllegalBlockSizeException e) {
+        // e.printStackTrace();
+        // } catch (BadPaddingException e) {
+        // e.printStackTrace();
+        // } catch (NoSuchAlgorithmException e) {
+        // e.printStackTrace();
+        // } catch (NoSuchPaddingException e) {
+        // e.printStackTrace();
+        // } catch (SignatureException e) {
+        // e.printStackTrace();
+        // }
     }
 
     public void testsign(KeyPairEntry entry, int keyLength) throws InvalidKeyException, InvalidKeySpecException, IllegalBlockSizeException,
@@ -141,29 +147,21 @@ public class RSA2048SelfTester {
     private SecureRandom random;
     private BigInteger publicExponent = RSAKeyGenParameterSpec.F4;;
 
-    public void testEncryByPrivatekey(KeyPairEntry keyPair, int keyLength) {
+    public void testEncryByPrivatekey(KeyPairEntry keyPair, int keyLength)
+            throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
         // rsa 算法的加密block大小为 keyLength / 8 -11(inclusive)
         int maxDecryptedBlockLengh = keyLength / 8;
         int maxEncryptedBlockLength = maxDecryptedBlockLengh - 11;
-        for (int blockSize = 1; blockSize <= maxEncryptedBlockLength; blockSize++) {
+        for (int blockSize = maxEncryptedBlockLength; blockSize <= maxEncryptedBlockLength; blockSize++) {
 
             byte[] original = createByteArray(blockSize);
-            try {
-                // System.out.println("original length:" + blockSize);
-                byte[] encoded = RSAUtils.encryptByPrivateKey(original, keyPair.getEncodedPrivateKey(), blockSize);
-                // byte[] decoded = RSAUtils.decryptByPublicKey(encoded,
-                // keyPair.getEncodedPublicKey(), encoded.length);
-                // System.out.println("encoded:" + encoded.length);
-                // System.out.println(Arrays.equals(original, decoded));
-            } catch (InvalidKeyException |
-            // NoSuchAlgorithmException |
-                    InvalidKeySpecException
-                    // | NoSuchPaddingException
-                    | IllegalBlockSizeException | BadPaddingException e) {
-                e.printStackTrace();
-                System.out.println("break.");
-                break;
-            }
+
+            // System.out.println("original length:" + blockSize);
+            byte[] encoded = doEncrypt(original, keyPair.getPrivateKey());
+            // byte[] decoded = RSAUtils.decryptByPublicKey(encoded,
+            // keyPair.getEncodedPublicKey(), encoded.length);
+            // System.out.println("encoded:" + encoded.length);
+            // System.out.println(Arrays.equals(original, decoded));
         }
     }
 
@@ -171,7 +169,7 @@ public class RSA2048SelfTester {
         // rsa 算法的加密block大小为 keyLength / 8 -11(inclusive)
         int maxDecryptedBlockLengh = keyLength / 8;
         int maxEncryptedBlockLength = maxDecryptedBlockLengh - 11;
-        for (int blockSize = 1; blockSize <= maxEncryptedBlockLength; blockSize++) {
+        for (int blockSize = maxEncryptedBlockLength; blockSize <= maxEncryptedBlockLength; blockSize++) {
 
             byte[] original = createByteArray(blockSize);
             try {

@@ -42,6 +42,9 @@ public class SSLServerSocketTutorial {
      * @param args
      */
     public static void main(String[] args) {
+        System.setProperty("javax.net.debug", "all,ssl,handshake");
+        System.setProperty("javax.net.ssl.keyStore", "F:/key/aposoft.cn.jks");
+        System.setProperty("javax.net.ssl.keyStorePassword", "changeit");
         final HandshakeCompletedListener listener = new HandshakeCompletedListener() {
 
             @Override

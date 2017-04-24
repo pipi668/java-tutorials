@@ -12,10 +12,36 @@ import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.io.IOUtils;
 
 /**
+ * <pre>
+ Ethernet Protocol
+ * 
+ * </pre>
+ * 
  * 
  * <pre>
  * IP Protocol
- * 
+
+    0                   1                   2                   3
+    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |Version|  IHL  |Type of Service|          Total Length         |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |         Identification        |Flags|      Fragment Offset    |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |  Time to Live |    Protocol   |         Header Checksum       |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |                       Source Address                          |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |                    Destination Address                        |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |                    Options                    |    Padding    |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+                    Example Internet Datagram Header
+
+                               Figure 4.
+
+  Note that each tick mark represents one bit position.
  * </pre>
  * 
  * <pre>
@@ -41,8 +67,7 @@ import org.apache.commons.io.IOUtils;
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
                             TCP Header Format
-
-          Note that one tick mark represents one bit position.
+ * 
  * </pre>
  * 
  * @author LiuJian
@@ -59,11 +84,148 @@ public class EthernetIpTcpParser {
      * @throws DecoderException
      */
     public static void main(String[] args) throws IOException, DecoderException {
+        System.out.println("0");
         parseFirstSyn();
+        System.out.println("1");
+        parseFirstAck();
+        System.out.println("2");
+        parseSecondAck();
+        System.out.println("3");
+        parseFirstFin();
+        System.out.println("4");
+        parseFirstFin2();
+        System.out.println("5");
+        parseFirstFin3();
     }
 
+    /**
+     * TCP 3次握手 第1次
+     * 
+     * @throws IOException
+     * @throws DecoderException
+     */
     public static void parseFirstSyn() throws IOException, DecoderException {
         try (InputStream input = ClassLoader.getSystemResourceAsStream("cn/aposoft/tutorial/net/tcp/tcp_handshake_0.raw");) {
+            byte[] buffer = new byte[1024];
+            int length = IOUtils.read(input, buffer);
+            System.out.println("TCP HANDSHAKE STEP 1 -- TOTAL FRAME SIZE:\t" + length);
+            System.out.println();
+            int offset = 0;
+            String encoded = Hex.encodeHexString(Arrays.copyOfRange(buffer, 0, length));
+            offset = printEthernetHeader(encoded, offset);
+
+            System.out.println();
+            offset = printIpHeader(encoded, offset);
+            System.out.println();
+            offset = printTcpHeader(encoded, offset);
+
+        }
+    }
+
+    /**
+     * TCP 3次握手 第2次
+     * 
+     * @throws IOException
+     * @throws DecoderException
+     */
+    public static void parseFirstAck() throws IOException, DecoderException {
+        try (InputStream input = ClassLoader.getSystemResourceAsStream("cn/aposoft/tutorial/net/tcp/tcp_handshake_1.raw");) {
+            byte[] buffer = new byte[1024];
+            int length = IOUtils.read(input, buffer);
+            System.out.println("TCP HANDSHAKE STEP 1 -- TOTAL FRAME SIZE:\t" + length);
+            System.out.println();
+            int offset = 0;
+            String encoded = Hex.encodeHexString(Arrays.copyOfRange(buffer, 0, length));
+            offset = printEthernetHeader(encoded, offset);
+
+            System.out.println();
+            offset = printIpHeader(encoded, offset);
+            System.out.println();
+            offset = printTcpHeader(encoded, offset);
+
+        }
+    }
+
+    /**
+     * TCP 3次握手 第3次
+     * 
+     * @throws IOException
+     * @throws DecoderException
+     */
+    public static void parseSecondAck() throws IOException, DecoderException {
+        try (InputStream input = ClassLoader.getSystemResourceAsStream("cn/aposoft/tutorial/net/tcp/tcp_handshake_2.raw");) {
+            byte[] buffer = new byte[1024];
+            int length = IOUtils.read(input, buffer);
+            System.out.println("TCP HANDSHAKE STEP 1 -- TOTAL FRAME SIZE:\t" + length);
+            System.out.println();
+            int offset = 0;
+            String encoded = Hex.encodeHexString(Arrays.copyOfRange(buffer, 0, length));
+            offset = printEthernetHeader(encoded, offset);
+
+            System.out.println();
+            offset = printIpHeader(encoded, offset);
+            System.out.println();
+            offset = printTcpHeader(encoded, offset);
+
+        }
+    }
+
+    /**
+     * TCP 3次握手 第3次
+     * 
+     * @throws IOException
+     * @throws DecoderException
+     */
+    public static void parseFirstFin() throws IOException, DecoderException {
+        try (InputStream input = ClassLoader.getSystemResourceAsStream("cn/aposoft/tutorial/net/tcp/tcp_handshake_3.raw");) {
+            byte[] buffer = new byte[1024];
+            int length = IOUtils.read(input, buffer);
+            System.out.println("TCP HANDSHAKE STEP 1 -- TOTAL FRAME SIZE:\t" + length);
+            System.out.println();
+            int offset = 0;
+            String encoded = Hex.encodeHexString(Arrays.copyOfRange(buffer, 0, length));
+            offset = printEthernetHeader(encoded, offset);
+
+            System.out.println();
+            offset = printIpHeader(encoded, offset);
+            System.out.println();
+            offset = printTcpHeader(encoded, offset);
+
+        }
+    }
+
+    /**
+     * TCP 3次握手 第3次
+     * 
+     * @throws IOException
+     * @throws DecoderException
+     */
+    public static void parseFirstFin2() throws IOException, DecoderException {
+        try (InputStream input = ClassLoader.getSystemResourceAsStream("cn/aposoft/tutorial/net/tcp/tcp_handshake_4.raw");) {
+            byte[] buffer = new byte[1024];
+            int length = IOUtils.read(input, buffer);
+            System.out.println("TCP HANDSHAKE STEP 1 -- TOTAL FRAME SIZE:\t" + length);
+            System.out.println();
+            int offset = 0;
+            String encoded = Hex.encodeHexString(Arrays.copyOfRange(buffer, 0, length));
+            offset = printEthernetHeader(encoded, offset);
+
+            System.out.println();
+            offset = printIpHeader(encoded, offset);
+            System.out.println();
+            offset = printTcpHeader(encoded, offset);
+
+        }
+    }
+
+    /**
+     * TCP 3次握手 第3次
+     * 
+     * @throws IOException
+     * @throws DecoderException
+     */
+    public static void parseFirstFin3() throws IOException, DecoderException {
+        try (InputStream input = ClassLoader.getSystemResourceAsStream("cn/aposoft/tutorial/net/tcp/tcp_handshake_5.raw");) {
             byte[] buffer = new byte[1024];
             int length = IOUtils.read(input, buffer);
             System.out.println("TCP HANDSHAKE STEP 1 -- TOTAL FRAME SIZE:\t" + length);
@@ -96,21 +258,80 @@ public class EthernetIpTcpParser {
         offset = printSequenceNumber("Acknowledgment Number", encoded, offset);
         offset = printTcpDataOffset(encoded, offset);
         offset = printReserved(encoded, offset);
-//        offset = 
+        offset = printControlBits(encoded, offset);
+        offset = printWindow(encoded, offset);
+        offset = printChecksum(encoded, offset);
+        offset = printUrgentPointer(encoded, offset);
+        offset = printOptions(encoded, offset);
         return 0;
     }
 
+    private static int printOptions(String encoded, final int initOffset) throws DecoderException {
+        System.out.println("Options:\t\t" + encoded.substring(initOffset));
+        return encoded.length() - 1;
+    }
+
+    private static int printUrgentPointer(String encoded, final int initOffset) throws DecoderException {
+        System.out.print("Urgent Pointer:\t\t");
+        System.out.println(getShort(Hex.decodeHex(encoded.substring(initOffset, initOffset + 4).toCharArray())));
+        return initOffset + 4;
+    }
+
+    private static int printChecksum(String encoded, final int initOffset) throws DecoderException {
+        System.out.print("Checksum:\t\t");
+        System.out.println(getShort(Hex.decodeHex(encoded.substring(initOffset, initOffset + 4).toCharArray())));
+        return initOffset + 4;
+    }
+
+    /**
+     * TCP Window
+     * 
+     * @param encoded
+     * @param offset
+     * @return
+     * @throws DecoderException
+     */
+    private static int printWindow(String encoded, final int initOffset) throws DecoderException {
+        System.out.print("Window:\t\t\t");
+        System.out.println(getShort(Hex.decodeHex(encoded.substring(initOffset, initOffset + 4).toCharArray())));
+        return initOffset + 4;
+    }
+
+    /**
+     * TCP ControlBits
+     * 
+     * @param encoded
+     * @param offset
+     * @return
+     * @throws DecoderException
+     */
+    private static int printControlBits(String encoded, final int initOffset) throws DecoderException {
+        byte[] bytes = Hex.decodeHex(encoded.substring(initOffset, initOffset + 2).toCharArray());
+        System.out.println("Control Bits:\t\t");
+        boolean urg = (bytes[0] & 0b0010_0000) > 0;
+        boolean ack = (bytes[0] & 0b0001_0000) > 0;
+        boolean psh = (bytes[0] & 0b0000_1000) > 0;
+        boolean rst = (bytes[0] & 0b0000_0100) > 0;
+        boolean syn = (bytes[0] & 0b0000_0010) > 0;
+        boolean fin = (bytes[0] & 0b0000_0001) > 0;
+        System.out.println("URG:　" + urg + ",ACK:" + ack + ",PSH:" + psh + ",RST:" + rst + ",SYN:" + syn + ",FIN:" + fin);
+
+        return initOffset + 2;
+    }
+
     private static int printReserved(String encoded, final int initOffset) throws DecoderException {
-        System.out.print("Reserved:\t\t\t");
+        System.out.print("Reserved:\t\t");
         byte[] bytes = Hex.decodeHex(encoded.substring(initOffset, initOffset + 4).toCharArray());
-        System.out.printf("%b{4}" + (bytes[0] & 0x0F));
+        String reserved = Integer.toBinaryString((((bytes[0] & 0x0F) << 2) | (bytes[1] & 0b11000000) >> 6));
+        System.out.printf("0b%s", reserved);
         System.out.println();
-        return initOffset;
+        return initOffset + 2;
     }
 
     private static int printTcpDataOffset(String encoded, final int initOffset) throws DecoderException {
         System.out.print("Data Offset:\t\t");
         byte[] bytes = Hex.decodeHex(encoded.substring(initOffset, initOffset + 2).toCharArray());
+
         System.out.print(((bytes[0] & 0xF0) >> 4) + " (* 4 bytes)");
         System.out.println();
         return initOffset;

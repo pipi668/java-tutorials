@@ -10,8 +10,10 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.net.InetAddress;
 import java.nio.charset.StandardCharsets;
 
+import javax.net.ssl.SSLParameters;
 import javax.net.ssl.SSLServerSocket;
 import javax.net.ssl.SSLServerSocketFactory;
 import javax.net.ssl.SSLSocket;
@@ -30,23 +32,27 @@ public class SimpleSslServer {
      * @param args
      */
     public static void main(String[] args) throws Exception {
-        System.setProperty("javax.net.debug", "all,ssl,handshake");
+        System.setProperty("javax.net.debug", "ssl,handshake");
 
         System.setProperty("javax.net.ssl.keyStore", "F:/key/aposoft.cn.jks");
         System.setProperty("javax.net.ssl.keyStorePassword", "changeit");
-//        System.setProperty("javax.net.ssl.trustStore", "F:/key/aposoft.cn.jks");
-//        System.setProperty("javax.net.ssl.trustStorePassword", "changeit");
 
-        SSLServerSocketFactory serverSocketFactory = (SSLServerSocketFactory) SSLServerSocketFactory.getDefault();
-        SSLServerSocket serverSocket = (SSLServerSocket) serverSocketFactory.createServerSocket(9101);
-        // 要求客户端身份验证
-        serverSocket.setNeedClientAuth(false);
+        final String host = "aposoft.cn";
+        final InetAddress inetAddress = InetAddress.getByName(host);
+        final int port = 9101;
 
-        while (true) {
-            SSLSocket socket = (SSLSocket) serverSocket.accept();
-            Accepter accepter = new Accepter(socket);
-            accepter.service();
+        try (SSLServerSocket serverSocket = (SSLServerSocket) SSLServerSocketFactory.getDefault().createServerSocket(port, 0, inetAddress);) {
+            SSLParameters paramSSLParameters = serverSocket.getSSLParameters();
+            paramSSLParameters.setEndpointIdentificationAlgorithm("HTTPS");
+            // 期望客户端验证
+            serverSocket.setWantClientAuth(true);
+            while (true) {
+                SSLSocket socket = (SSLSocket) serverSocket.accept();
+                Accepter accepter = new Accepter(socket);
+                accepter.service();
+            }
         }
+
     }
 
     static class Accepter implements Runnable {

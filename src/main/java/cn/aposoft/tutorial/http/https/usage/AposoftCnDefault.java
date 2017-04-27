@@ -35,7 +35,7 @@ public class AposoftCnDefault {
     public static void main(String[] args)
             throws IOException, KeyManagementException, NoSuchAlgorithmException, KeyStoreException, CertificateException {
 
-        System.setProperty("javax.net.debug", "all,ssl");
+//        System.setProperty("javax.net.debug", "all,ssl");
         TrustStrategy trustStrategy = new TrustStrategy() {
             @Override
             public boolean isTrusted(X509Certificate[] chain, String authType) throws CertificateException {
@@ -68,6 +68,12 @@ public class AposoftCnDefault {
                 .setSSLSocketFactory(sslSocketFactory).build()) {
             HttpGet httpGet = new HttpGet("https://www.aposoft.cn/");
             // HttpGet httpGet = new HttpGet("https://www.startssl.com/");
+            try (CloseableHttpResponse resp = client.execute(httpGet)) {
+                String respText = EntityUtils.toString(resp.getEntity(), StandardCharsets.UTF_8);
+                System.out.println(respText);
+            }
+            System.out.println("open javax.net.debug");
+            System.setProperty("javax.net.debug", "all,ssl");
             try (CloseableHttpResponse resp = client.execute(httpGet)) {
                 String respText = EntityUtils.toString(resp.getEntity(), StandardCharsets.UTF_8);
                 System.out.println(respText);

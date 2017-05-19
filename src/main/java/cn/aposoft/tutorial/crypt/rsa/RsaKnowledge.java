@@ -28,7 +28,13 @@ public class RsaKnowledge {
 
         final int p_1q_1 = (p - 1) * (q - 1);
         // 计算私钥使用的 exponent
-        // modInverse: ( e * d ) mod (p-1)*(q-1) = 1;
+        // modInverse: ( e * d ) mod ((p-1)*(q-1)) = 1;
+        //  记作:  e * d = 1 (mod ((p-1)*(q-1)));
+        //  可以分解为: 
+        
+        // 
+        // 
+        // 
         final int d = BigInteger.valueOf(e).modInverse(BigInteger.valueOf(p_1q_1)).intValue();
         // 定义原始的值
         int ov = 10;

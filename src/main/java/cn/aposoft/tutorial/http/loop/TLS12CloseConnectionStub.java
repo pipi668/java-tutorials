@@ -42,14 +42,17 @@ public class TLS12CloseConnectionStub {
     public static void main(String[] args)
             throws ClientProtocolException, IOException, KeyManagementException, NoSuchAlgorithmException, KeyStoreException, CertificateException {
         System.setProperty("javax.net.debug", "ssl,handshake");
-        System.setProperty("javax.net.ssl.trustStore", "StartComRoot1.jks");
-        System.setProperty("javax.net.ssl.trustStorePassword", "changeit");
-        HttpGet get = new HttpGet("https://www.aposoft.cn:8443/");
-        // HttpGet get = new HttpGet("https://www.gomemyf.com/");
+        // System.setProperty("javax.net.ssl.trustStore", "StartComRoot1.jks");
+        // System.setProperty("javax.net.ssl.trustStorePassword", "changeit");
+        // HttpGet get = new HttpGet("https://www.aposoft.cn:8443/");
+//        HttpGet get = new HttpGet("https://fen.gomemyf.com/");
+        HttpGet get = new HttpGet("https://fen.gomemyf.com/");
         get.addHeader("Connection", "close");
         SSLContext sslContext = SSLContexts.createDefault();
         final String[] enabledProtocols = new String[] { "TLSv1.2" };
-        final String[] supportedCipherSuites = new String[] { "TLS_RSA_WITH_AES_256_CBC_SHA" };
+        final String[] supportedCipherSuites = null;// new String[] {
+                                                    // "TLS_RSA_WITH_AES_256_CBC_SHA"
+                                                    // };
         // cn.aposoft.tutorial.http.https.verifier
         HostnameVerifier hostNameVerifier = new DefaultHostnameVerifier();
         SSLConnectionSocketFactory sslSocketFactory = new SSLConnectionSocketFactory(sslContext, enabledProtocols, supportedCipherSuites,
@@ -60,7 +63,7 @@ public class TLS12CloseConnectionStub {
                 .setSSLSocketFactory(sslSocketFactory).build()) {
             long begin = System.currentTimeMillis();
 
-            for (int i = 0; i < 2; i++) {
+            for (int i = 0; i < 1; i++) {
                 CloseableHttpResponse resp = client.execute(get);
                 {
                     // System.out.println(EntityUtils.toString(resp.getEntity()));

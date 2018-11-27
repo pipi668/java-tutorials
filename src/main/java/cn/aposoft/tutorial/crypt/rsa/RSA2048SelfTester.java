@@ -11,8 +11,10 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.SignatureException;
 import java.security.interfaces.RSAPrivateCrtKey;
+import java.security.interfaces.RSAPublicKey;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.RSAKeyGenParameterSpec;
+import java.util.Arrays;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
@@ -22,12 +24,12 @@ import javax.crypto.NoSuchPaddingException;
 import cn.aposoft.tutorial.crypt.rsa.RSAUtils.KeyPairEntry;
 import sun.security.jca.JCAUtil;
 import sun.security.rsa.RSAPublicKeyImpl;
+import sun.security.rsa.RSAUtil.KeyType;
 
 /**
  * @author LiuJian
  *
  */
-@SuppressWarnings("restriction")
 public class RSA2048SelfTester {
     private String publicKey;
     private String privateKey;
@@ -39,9 +41,10 @@ public class RSA2048SelfTester {
      * @throws NoSuchPaddingException
      * @throws NoSuchAlgorithmException
      * @throws InvalidKeyException
+     * @throws InvalidKeySpecException 
      */
     public static void main(String[] args)
-            throws InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException {
+            throws InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException, InvalidKeySpecException {
         int keyLength = 2048;
         // createKeyPair();
         // new RSA2048Tester().generateKeyPair()
@@ -148,7 +151,7 @@ public class RSA2048SelfTester {
     private BigInteger publicExponent = RSAKeyGenParameterSpec.F4;;
 
     public void testEncryByPrivatekey(KeyPairEntry keyPair, int keyLength)
-            throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
+            throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException, InvalidKeySpecException {
         // rsa 算法的加密block大小为 keyLength / 8 -11(inclusive)
         int maxDecryptedBlockLengh = keyLength / 8;
         int maxEncryptedBlockLength = maxDecryptedBlockLengh - 11;
@@ -158,15 +161,15 @@ public class RSA2048SelfTester {
 
             // System.out.println("original length:" + blockSize);
             byte[] encoded = doEncrypt(original, keyPair.getPrivateKey());
-            // byte[] decoded = RSAUtils.decryptByPublicKey(encoded,
-            // keyPair.getEncodedPublicKey(), encoded.length);
-            // System.out.println("encoded:" + encoded.length);
-            // System.out.println(Arrays.equals(original, decoded));
+			byte[] decoded = RSAUtils.decryptByPublicKey(encoded, keyPair.getEncodedPublicKey(), encoded.length);
+			System.out.println("encoded:" + encoded.length);
+			System.out.println(Arrays.equals(original, decoded));
         }
     }
 
     public void testEncryByPublickey(KeyPairEntry keyPair, int keyLength) {
-        // rsa 算法的加密block大小为 keyLength / 8 -11(inclusive)
+        // RSA 算法的加密block大小为 keyLength / 8 -11(inclusive)
+    	// RSA 指定的填充算法下，最大加密长度为11
         int maxDecryptedBlockLengh = keyLength / 8;
         int maxEncryptedBlockLength = maxDecryptedBlockLengh - 11;
         for (int blockSize = maxEncryptedBlockLength; blockSize <= maxEncryptedBlockLength; blockSize++) {
@@ -259,8 +262,10 @@ public class RSA2048SelfTester {
         BigInteger coeff = q.modInverse(p);
         System.out.println("coeff:" + coeff);
         try {
-            RSAPublicKeyImpl localRSAPublicKeyImpl = new RSAPublicKeyImpl(n, e);
-            RSAPrivateCrtKeyImpl localRSAPrivateCrtKeyImpl = new RSAPrivateCrtKeyImpl//
+        	// JDK 11.0.1
+        	RSAPublicKey localRSAPublicKeyImpl =RSAPublicKeyImpl.newKey(KeyType.RSA, null, n, e);
+			
+            RSAPrivateCrtKey localRSAPrivateCrtKeyImpl = new RSAPrivateCrtKeyImpl//
             (n, e, d, (BigInteger) p, (BigInteger) q, pe, qe, coeff);
 
             return new KeyPair(localRSAPublicKeyImpl, localRSAPrivateCrtKeyImpl);

@@ -14,63 +14,66 @@ import sun.misc.Unsafe;
  */
 public class EndianTest {
 
-    // 使用方法
-    @SuppressWarnings("restriction")
-    private static Unsafe getUnsafeInstance() throws SecurityException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
-        Field theUnsafeInstance = Unsafe.class.getDeclaredField("theUnsafe");
-        theUnsafeInstance.setAccessible(true);
-        // return Unsafe.getUnsafe();
-        return (Unsafe) theUnsafeInstance.get(Unsafe.class);
+	// 使用方法
 
-    }
+	private static Unsafe getUnsafeInstance()
+			throws SecurityException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
+//        Field theUnsafeInstance = Unsafe.class.getDeclaredField("theUnsafe");
+//        theUnsafeInstance.setAccessible(true);
+//      
+//        return (Unsafe) theUnsafeInstance.get(Unsafe.class);
 
-    private long demo;
+		return Unsafe.getUnsafe();
+	}
 
-    private short sdemo;
+	private long demo;
 
-    private int idemo;
+	private short sdemo;
 
-    /**
-     * @param args
-     * @throws IllegalAccessException
-     * @throws IllegalArgumentException
-     * @throws NoSuchFieldException
-     * @throws SecurityException
-     */
-    public static void main(String[] args) throws SecurityException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
-        Unsafe unsafe = getUnsafeInstance();
+	private int idemo;
 
-        EndianTest testInstance = new EndianTest();
+	/**
+	 * @param args
+	 * @throws IllegalAccessException
+	 * @throws IllegalArgumentException
+	 * @throws NoSuchFieldException
+	 * @throws SecurityException
+	 */
+	public static void main(String[] args)
+			throws SecurityException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
+		Unsafe unsafe = getUnsafeInstance();
 
-        long demoOffset = unsafe.fieldOffset(EndianTest.class.getDeclaredField("demo"));
+		EndianTest testInstance = new EndianTest();
 
-        testInstance.demo = 0x1122233455667788L;
-        System.out.printf("%x\r\n", testInstance.demo);
-        for (int i = 0; i < 8; i++) {
-            byte curr = unsafe.getByte(testInstance, demoOffset + i);
-            System.out.printf("i:%d,v:%x\r\n", i, curr);
-        }
+		long demoOffset = unsafe.objectFieldOffset(EndianTest.class.getDeclaredField("demo"));
 
-        short s = (short) testInstance.demo;
+		testInstance.demo = 0x1122233455667788L;
+		System.out.printf("%x\r\n", testInstance.demo);
+		for (int i = 0; i < 8; i++) {
+			byte curr = unsafe.getByte(testInstance, demoOffset + i);
+			System.out.printf("i:%d,v:%x\r\n", i, curr);
+		}
 
-        System.out.printf("%x\r\n", s);
+		short s = (short) testInstance.demo;
 
-        long sOffset = unsafe.fieldOffset(EndianTest.class.getDeclaredField("sdemo"));
-        testInstance.sdemo = -32768;
+		System.out.printf("%x\r\n", s);
 
-        System.out.println();
-        for (int i = 0; i < 4; i++) {
-            byte curr = unsafe.getByte(testInstance, sOffset + i);
-            System.out.printf("i:%d,v:%x\r\n", i, curr);
-        }
+		long sOffset = unsafe.objectFieldOffset(EndianTest.class.getDeclaredField("sdemo"));
+		testInstance.sdemo = -32768;
 
-        long iOffset = unsafe.fieldOffset(EndianTest.class.getDeclaredField("idemo"));
-        testInstance.idemo = -32768;
-        for (int i = 0; i < 4; i++) {
-            byte curr = unsafe.getByte(testInstance, iOffset + i);
-            System.out.printf("i:%d,v:%x\r\n", i, curr);
-        }
+		System.out.println();
+		for (int i = 0; i < 4; i++) {
+			byte curr = unsafe.getByte(testInstance, sOffset + i);
+			System.out.printf("i:%d,v:%x\r\n", i, curr);
+		}
 
-    }
+		long iOffset = unsafe.objectFieldOffset(EndianTest.class.getDeclaredField("idemo"));
+		testInstance.idemo = -32768;
+		for (int i = 0; i < 4; i++) {
+			byte curr = unsafe.getByte(testInstance, iOffset + i);
+			System.out.printf("i:%d,v:%x\r\n", i, curr);
+		}
+
+	}
 
 }

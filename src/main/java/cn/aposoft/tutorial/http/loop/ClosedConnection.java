@@ -13,7 +13,7 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 
-import cn.aposoft.http.impl.conn.BasicHttpClientConnectionManager;
+import cn.aposoft.tutorial.http.impl.conn.BasicHttpClientConnectionManager;
 
 /**
  * @author LiuJian

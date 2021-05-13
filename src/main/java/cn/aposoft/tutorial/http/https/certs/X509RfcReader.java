@@ -3,6 +3,8 @@
  */
 package cn.aposoft.tutorial.http.https.certs;
 
+import org.apache.commons.codec.binary.Base64;
+
 import java.io.ByteArrayInputStream;
 import java.io.FileReader;
 import java.io.IOException;
@@ -13,8 +15,6 @@ import java.security.SignatureException;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
-
-import org.apache.commons.codec.binary.Base64;
 
 /**
  * 

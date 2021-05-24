@@ -23,7 +23,7 @@ public class RsaKnowledge {
         final int q = 17;
         // 计算质数的乘积
         final int n = p * q;
-        // 定义 公钥exponent ,因为3无法计算私钥,所以用5
+        // 定义 公钥 exponent ,因为3无法计算私钥,所以用5
         final int e = 5;
 
         final int p_1q_1 = (p - 1) * (q - 1);

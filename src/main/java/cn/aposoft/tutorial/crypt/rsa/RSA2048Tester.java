@@ -10,10 +10,8 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.SignatureException;
 import java.security.interfaces.RSAPrivateCrtKey;
-import java.security.interfaces.RSAPublicKey;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.RSAKeyGenParameterSpec;
-import java.util.Arrays;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
@@ -21,9 +19,6 @@ import javax.crypto.NoSuchPaddingException;
 
 import cn.aposoft.tutorial.crypt.rsa.RSAUtils.KeyPairEntry;
 import sun.security.jca.JCAUtil;
-import sun.security.rsa.RSAPublicKeyImpl;
-import sun.security.rsa.RSAUtil.KeyType;
-import sun.security.x509.AlgorithmId;
 
 /**
  * @author LiuJian
@@ -265,15 +260,16 @@ public class RSA2048Tester {
 		// : coeff =
 		BigInteger coeff = q.modInverse(p);
 		System.out.println(" ( q * coeff ) mod p =1 , \r\ncoeff:" + coeff);
-		try {
-			RSAPublicKey localRSAPublicKeyImpl =RSAPublicKeyImpl.newKey(KeyType.RSA, null, n, e);
-			
-			RSAPrivateCrtKey localRSAPrivateCrtKeyImpl = new RSAPrivateCrtKeyImpl//
-			(n, e, d, p, q, pe, qe, coeff);
-
-			return new KeyPair(localRSAPublicKeyImpl, localRSAPrivateCrtKeyImpl);
-		} catch (InvalidKeyException localInvalidKeyException) {
-			throw new RuntimeException(localInvalidKeyException);
-		}
+//		try {
+//			RSAPublicKey localRSAPublicKeyImpl =RSAPublicKeyImpl.newKey(KeyType.RSA, null, n, e);
+//			
+//			RSAPrivateCrtKey localRSAPrivateCrtKeyImpl = new RSAPrivateCrtKeyImpl//
+//			(n, e, d, p, q, pe, qe, coeff);
+//
+//			return new KeyPair(localRSAPublicKeyImpl, localRSAPrivateCrtKeyImpl);
+//		} catch (InvalidKeyException localInvalidKeyException) {
+//			throw new RuntimeException(localInvalidKeyException);
+//		}
+		return null;
 	}
 }

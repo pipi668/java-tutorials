@@ -1,9 +1,7 @@
 package cn.aposoft.tutorial.thread;
 
 /**
- * 
  * @author LiuJian
- *
  */
 public class ThreadStub {
 
@@ -17,7 +15,6 @@ public class ThreadStub {
     }
 
     /**
-     * 
      * @param args
      * @throws InterruptedException
      */
@@ -28,8 +25,14 @@ public class ThreadStub {
          * Thread.sleep(10000); t.join(); } catch (InterruptedException e) {
          * e.printStackTrace(); }
          */
-
-        new Command().run();
+        System.out.println("isInterrupted:" + Thread.currentThread().isInterrupted());
+        // 设置打断状态
+        Thread.currentThread().interrupt();
+        System.out.println("isInterrupted:" + Thread.currentThread().isInterrupted());
+        // 清除打断状态，并返回清除前状态
+        System.out.println("isInterrupted:" + Thread.interrupted()); ;
+        System.out.println("isInterrupted:" + Thread.currentThread().isInterrupted());
+//        new Command().run();
 
     }
 }

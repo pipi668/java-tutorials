@@ -15,9 +15,9 @@ import org.apache.http.conn.HttpClientConnectionManager;
 import org.apache.http.conn.socket.ConnectionSocketFactory;
 import org.apache.http.util.EntityUtils;
 
-import cn.aposoft.http.conn.ssl.SSLConnectionSocketFactory;
-import cn.aposoft.http.impl.client.MinimalHttpClient;
-import cn.aposoft.http.impl.conn.BasicHttpClientConnectionManager;
+import cn.aposoft.tutorial.http.ssl.SSLConnectionSocketFactory;
+import cn.aposoft.tutorial.http.impl.client.MinimalHttpClient;
+import cn.aposoft.tutorial.http.impl.conn.BasicHttpClientConnectionManager;
 
 /**
  * 自定义HTTPClienttrace

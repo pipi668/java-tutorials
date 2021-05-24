@@ -14,9 +14,8 @@ import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 
-import org.bouncycastle.jce.provider.BouncyCastleProvider;
-
 import cn.aposoft.tutorial.crypt.rsa.RSAUtils.KeyPairEntry;
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 /**
  * @author LiuJian

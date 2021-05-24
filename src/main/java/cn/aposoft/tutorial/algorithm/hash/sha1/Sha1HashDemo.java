@@ -1,17 +1,18 @@
 /**
- *   Copyright  :  www.aposoft.cn
+ * Copyright  :  www.aposoft.cn
  */
 package cn.aposoft.tutorial.algorithm.hash.sha1;
+
+import org.apache.commons.codec.digest.DigestUtils;
 
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 
-import org.apache.commons.codec.digest.DigestUtils;
 
 /**
  * @author LiuJian
  * @date 2017年3月21日
- * 
+ *
  */
 public class Sha1HashDemo {
 
